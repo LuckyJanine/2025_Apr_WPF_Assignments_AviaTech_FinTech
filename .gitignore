@@ -1,0 +1,7 @@
+*.csproj.user
+.vs/
+
+obj/
+bin/
+
+*.zip
