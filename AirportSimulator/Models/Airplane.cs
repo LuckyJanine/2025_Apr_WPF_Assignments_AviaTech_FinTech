@@ -18,12 +18,16 @@ namespace AirportSimulator.Models
         private bool _isDestinationValid = true;
 
         private double _flightDuration;
+        private bool _isFlightDurationValid = true;
+
         private FlightStatus _flightStatus = FlightStatus.Scheduled;
         private bool _canLand = false;
+
         public Airplane()
         {
             
         }
+
         public Airplane(string name, string flightId, string destination, double flightDuration)
         {
             _name = name;
@@ -73,6 +77,7 @@ namespace AirportSimulator.Models
             {
                 _flightDuration = value;
                 OnPropertyChanged(nameof(FlightDuration));
+                ValidateFlightDuration(value);
             }
         }
 
@@ -105,6 +110,12 @@ namespace AirportSimulator.Models
                             return "Please specify the Destination";
                         }
                         break;
+                    case nameof(FlightDuration):
+                        if (!_isFlightDurationValid)
+                        {
+                            return "Double check the Flight Duration";
+                        }
+                        break;
                 }
                 return null;
             }
@@ -123,6 +134,18 @@ namespace AirportSimulator.Models
         private void ValidateDestination(string destination)
         {
             _isDestinationValid = !string.IsNullOrEmpty(destination);
+        }
+
+        private void ValidateFlightDuration(double flightDuration)
+        {
+            // input validation [assume]: no flight lasts longer than 24 hours or less then 3 mins
+            if (flightDuration > 24.0 || flightDuration < 0.05)
+            {
+                _isFlightDurationValid = false;
+            } else
+            {
+                _isFlightDurationValid = true;
+            }
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

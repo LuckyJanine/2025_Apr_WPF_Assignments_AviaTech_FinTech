@@ -1,14 +1,6 @@
 ﻿using System.Globalization;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AirportSimulator
 {
@@ -28,12 +20,22 @@ namespace AirportSimulator
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value is double flightDuration && flightDuration != 0.0)
+            {
+                return flightDuration.ToString(culture);
+            }
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            string txtFlightDuration = value as string;
+            txtFlightDuration = txtFlightDuration.Replace(',', '.');
+            if (double.TryParse(txtFlightDuration, NumberStyles.Any, CultureInfo.InvariantCulture, out double flightDuration))
+            {
+                return flightDuration;
+            }
+            return Binding.DoNothing;
         }
     }
 }

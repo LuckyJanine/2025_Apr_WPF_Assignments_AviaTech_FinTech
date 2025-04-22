@@ -8,6 +8,7 @@
         Title="Airport Simulator" Height="700" Width="650">
 
     <Window.Resources>
+        <local:DoubleToStringConverter x:Key="DoubleToStringConverter" />
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -109,19 +110,21 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Flight Time" VerticalAlignment="Center" />
+                            <TextBlock Text="Flight Time" VerticalAlignment="Center" 
+                                       TextWrapping="Wrap"/>
                             <TextBlock Grid.Row="1" Text="e.g., 1.25 hour(s)" 
                                        VerticalAlignment="Center" 
                                        FontSize="10"/>
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
                                      x:Name="txtFlightTime"
                                      Text="{Binding AirplaneToQueue.FlightDuration, 
-                                            UpdateSourceTrigger=PropertyChanged, 
+                                            UpdateSourceTrigger=LostFocus, 
                                             StringFormat=F2,
+                                            Converter={StaticResource DoubleToStringConverter},
                                             ValidatesOnDataErrors=True}"/>
                             <TextBlock Grid.Row="1" Grid.Column="1"
                                        Margin="5, 2, 0, 2"
-                                       FontSize="12"
+                                       FontSize="10"
                                        Foreground="Red"
                                        Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
                                        ElementName=txtFlightTime}" />
