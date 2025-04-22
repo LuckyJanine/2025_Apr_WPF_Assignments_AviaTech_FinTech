@@ -11,6 +11,9 @@
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="FontSize" Value="20"/>
         </Style>
     </Window.Resources>
 
@@ -18,8 +21,8 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="1.2*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="1.5*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <!--Grid.ColumnSpan-->
@@ -27,15 +30,116 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="1.2*"/>
                 </Grid.ColumnDefinitions>
+                <GroupBox FontSize="14"
+                          Header="Flight Information" 
+                          Margin="8">
+                    <StackPanel Margin="5">
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Name" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
+                                     x:Name="txtName"
+                                     Text="{Binding AirplaneToQueue.Name, 
+                                            UpdateSourceTrigger=PropertyChanged, 
+                                            ValidatesOnDataErrors=True}"/>
+                            <TextBlock  Grid.Row="1" Grid.Column="1"
+                                        Margin="5, 2, 0, 2"
+                                        FontSize="10"
+                                        Foreground="Red"
+                                        Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                        ElementName=txtName}" />
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Flight ID" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
+                                     x:Name="txtFlightId"
+                                     Text="{Binding AirplaneToQueue.FlightId, 
+                                            UpdateSourceTrigger=PropertyChanged, 
+                                            ValidatesOnDataErrors=True}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1"
+                                       Margin="5, 2, 0, 2"
+                                       FontSize="10"
+                                       Foreground="Red"
+                                       Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                       ElementName=txtFlightId}" />
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Destination" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
+                                     x:Name="txtDestination"
+                                     Text="{Binding AirplaneToQueue.Destination, 
+                                            UpdateSourceTrigger=PropertyChanged, 
+                                            ValidatesOnDataErrors=True}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1"
+                                       Margin="5, 2, 0, 2"
+                                       FontSize="10"
+                                       Foreground="Red"
+                                       Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                       ElementName=txtDestination}" />
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Flight Time" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
+                                     x:Name="txtFlightTime"
+                                     Text="{Binding AirplaneToQueue.FlightDuration, 
+                                            UpdateSourceTrigger=PropertyChanged, 
+                                            ValidatesOnDataErrors=True}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1"
+                                       Margin="5, 2, 0, 2"
+                                       FontSize="10"
+                                       Foreground="Red"
+                                       Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                       ElementName=txtFlightTime}" />
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+                <ListView Grid.Column="1" Margin="8">
+                </ListView>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Button x:Name="btnAddFlight"
+                        Content="Queue for Takeoff"/>
+                <Button Grid.Column="1"
+                        x:Name="btnTakeOff"
+                        Content="Clear for Takeoff"/>
             </Grid>
-            <Grid Grid.Row="2">
-            </Grid>
+            <ListBox Grid.Row="2" Margin="8">
+            </ListBox>
         </Grid>
     </Grid>
 </Window>
