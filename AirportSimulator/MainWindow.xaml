@@ -110,14 +110,18 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Flight Time" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="1" Text="e.g., 1.25 hour(s)" 
+                                       VerticalAlignment="Center" 
+                                       FontSize="10"/>
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
                                      x:Name="txtFlightTime"
                                      Text="{Binding AirplaneToQueue.FlightDuration, 
                                             UpdateSourceTrigger=PropertyChanged, 
+                                            StringFormat=F2,
                                             ValidatesOnDataErrors=True}"/>
                             <TextBlock Grid.Row="1" Grid.Column="1"
                                        Margin="5, 2, 0, 2"
-                                       FontSize="10"
+                                       FontSize="12"
                                        Foreground="Red"
                                        Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
                                        ElementName=txtFlightTime}" />
