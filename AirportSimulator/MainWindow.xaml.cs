@@ -35,7 +35,9 @@ namespace AirportSimulator
             {
                 return flightDuration;
             }
-            return Binding.DoNothing;
+            // tells WPF binding engine a conversion failuer for it to create a ValidationError object
+            return DependencyProperty.UnsetValue;
+            // DON'T use binding.donothing
         }
     }
 }
