@@ -9,19 +9,23 @@ namespace AirportSimulator.Models
         public string Error => null;
 
         private string _name;
-        private bool _isNameValid = true;
+        private bool _isNameValid;
 
         private string _flightId;
-        private bool _isFlightIdValid = true;
+        private bool _isFlightIdValid;
 
         private string _destination;
-        private bool _isDestinationValid = true;
+        private bool _isDestinationValid;
 
+        private string _txtFlightDuration;
         private double _flightDuration;
-        private bool _isFlightDurationValid = true;
+        private bool _isDurationConvertable;
+        private bool _isFlightDurationValid;
+
+        private bool _canAddFlight;
 
         private FlightStatus _flightStatus = FlightStatus.Scheduled;
-        private bool _canLand = false;
+        private bool _canLand;
 
         public Airplane()
         {
@@ -43,7 +47,9 @@ namespace AirportSimulator.Models
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
+                _isNameValid = false;
                 ValidateName(value);
+                ValidateAll();
             }
         }
 
@@ -54,7 +60,9 @@ namespace AirportSimulator.Models
             {
                 _flightId = value;
                 OnPropertyChanged(nameof(FlightId));
+                _isFlightIdValid = false;
                 ValidateFlightId(value);
+                ValidateAll();
             }
         }
 
@@ -66,18 +74,38 @@ namespace AirportSimulator.Models
                 value.Trim();
                 _destination = value;
                 OnPropertyChanged(nameof(Destination));
+                _isDestinationValid = false;
                 ValidateDestination(value);
+                ValidateAll();
             }
         }
 
-        public double FlightDuration
+        public string TxtFlightDuration
         {
-            get => _flightDuration;
+            get => _txtFlightDuration;
             set
             {
-                _flightDuration = value;
-                OnPropertyChanged(nameof(FlightDuration));
-                ValidateFlightDuration(value);
+                _txtFlightDuration = value;
+                OnPropertyChanged(nameof(TxtFlightDuration));
+                _isDurationConvertable = false;
+                _isFlightDurationValid = false;
+                double? duration = ConvertFlightDuration(value);
+                if (duration != null)
+                {
+                    ValidateFlightDuration(duration.Value);
+                    ValidateAll();
+                }
+            }
+        }
+
+
+        public bool CanAddAirplane
+        {
+            get => _canAddFlight;
+            set
+            {
+                _canAddFlight = value;
+                OnPropertyChanged(nameof(CanAddAirplane));
             }
         }
 
@@ -92,28 +120,38 @@ namespace AirportSimulator.Models
             {
                 switch (propName)
                 {
+                    //case nameof(Name):
+                    //    if (!_isNameValid)
+                    //    {
+                    //        return "Please provide Name of the aircraft";
+                    //    }
+                    //    break;
+                    //case nameof(FlightId):
+                    //    if (!_isFlightIdValid)
+                    //    {
+                    //        return "ID of the Flight is required";
+                    //    }
+                    //    break;
+                    //case nameof(Destination):
+                    //    if (!_isDestinationValid)
+                    //    {
+                    //        return "Please specify the Destination";
+                    //    }
+                    //    break;
                     case nameof(Name):
                         if (!_isNameValid)
                         {
-                            return "Please provide Name of the aircraft";
+                            return "less than 50 characters.";
                         }
                         break;
-                    case nameof(FlightId):
-                        if (!_isFlightIdValid)
+                    case nameof(TxtFlightDuration):
+                        if (!_isDurationConvertable)
                         {
-                            return "ID of the Flight is required";
+                            return "value not convertable.";
                         }
-                        break;
-                    case nameof(Destination):
-                        if (!_isDestinationValid)
-                        {
-                            return "Please specify the Destination";
-                        }
-                        break;
-                    case nameof(FlightDuration):
                         if (!_isFlightDurationValid)
                         {
-                            return "Double check the Flight Duration";
+                            return "3mins <= duration <= 24hrs.";
                         }
                         break;
                 }
@@ -123,7 +161,10 @@ namespace AirportSimulator.Models
 
         private void ValidateName(string name)
         {
-            _isNameValid = !string.IsNullOrEmpty(name);
+            if (name.Length <= 50)
+            {
+                _isNameValid = true;
+            }
         }
 
         private void ValidateFlightId(string flightId)
@@ -136,6 +177,16 @@ namespace AirportSimulator.Models
             _isDestinationValid = !string.IsNullOrEmpty(destination);
         }
 
+        private double? ConvertFlightDuration(string duration)
+        {
+            if (double.TryParse(duration, out double flightDuration))
+            {
+                _isDurationConvertable = true;
+                return flightDuration;
+            }
+            return null;
+        }
+        
         private void ValidateFlightDuration(double flightDuration)
         {
             // input validation [assume]: no flight lasts longer than 24 hours or less then 3 mins
@@ -145,7 +196,15 @@ namespace AirportSimulator.Models
             } else
             {
                 _isFlightDurationValid = true;
+                _flightDuration = flightDuration;
             }
+        }
+
+        private void ValidateAll()
+        {
+            CanAddAirplane = !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(FlightId)
+                && !string.IsNullOrWhiteSpace(Destination) 
+                && _isDurationConvertable && _isFlightDurationValid;
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

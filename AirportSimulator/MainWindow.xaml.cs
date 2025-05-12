@@ -1,5 +1,7 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace AirportSimulator
@@ -13,6 +15,84 @@ namespace AirportSimulator
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+        }
+
+        private void btnAddFlight_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is Button))
+            {
+                
+            }
+        }
+    }
+
+    //public class ValidationsToBtnEnableConverter : IMultiValueConverter
+    //{
+    //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        return ((bool)values[0]) && (values.Skip(1).All(v => v is bool b && !b));
+    //    }
+
+    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
+
+    //public class ValidationRuleStyleConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        var errors = value as ReadOnlyCollection<ValidationError>;
+    //        if (errors == null || errors.Count == 0)
+    //            return false;
+
+    //        return errors.Any(e => e.RuleInError != null && !(e.ErrorContent is string));
+    //    }
+
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
+    //}
+
+    public class ErrorContentToMessageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string message)
+                return message;
+
+            if (value is ErrorFromGeneralValidationRule error)
+                return error.ErrMessage;
+
+            return "Uncategorized validation error.";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    public class ValueIsNotNullOrEmpty : ValidationRule
+    {
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            string str = value as string;
+
+            if (!string.IsNullOrEmpty(str))
+            {
+                return ValidationResult.ValidResult;
+            }
+            else
+            {
+                return new ValidationResult(false, new ErrorFromGeneralValidationRule
+                {
+                    ErrCode = 101,
+                    ErrMessage = "* Required."
+                });
+            }
         }
     }
 
@@ -39,5 +119,11 @@ namespace AirportSimulator
             return DependencyProperty.UnsetValue;
             // DON'T use binding.donothing
         }
+    }
+
+    public class ErrorFromGeneralValidationRule
+    {
+        public int ErrCode { get; set; }
+        public string ErrMessage { get; set; }
     }
 }

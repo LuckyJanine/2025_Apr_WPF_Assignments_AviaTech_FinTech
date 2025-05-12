@@ -9,6 +9,8 @@
 
     <Window.Resources>
         <local:DoubleToStringConverter x:Key="DoubleToStringConverter" />
+        <local:ErrorContentToMessageConverter x:Key="ErrorContentToMessageConverter"/>
+        <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -46,16 +48,27 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
-                                     x:Name="txtName"
-                                     Text="{Binding AirplaneToQueue.Name, 
-                                            UpdateSourceTrigger=PropertyChanged, 
-                                            ValidatesOnDataErrors=True}"/>
+                                     x:Name="txtName">
+                                <!--Text="{Binding AirplaneToQueue.Name, 
+                                UpdateSourceTrigger=PropertyChanged, 
+                                ValidatesOnDataErrors=True}"-->
+                                <TextBox.Text>
+                                    <Binding Path="AirplaneToQueue.Name" 
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        ValidatesOnDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                             <TextBlock  Grid.Row="1" Grid.Column="1"
                                         Margin="5, 2, 0, 2"
                                         FontSize="10"
                                         Foreground="Red"
                                         Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
-                                        ElementName=txtName}" />
+                                        ElementName=txtName,
+                                        Converter={StaticResource ErrorContentToMessageConverter}}" />
                         </Grid>
                         <Grid Margin="5">
                             <Grid.RowDefinitions>
@@ -68,16 +81,26 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Flight ID" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
-                                     x:Name="txtFlightId"
-                                     Text="{Binding AirplaneToQueue.FlightId, 
-                                            UpdateSourceTrigger=PropertyChanged, 
-                                            ValidatesOnDataErrors=True}"/>
+                                     x:Name="txtFlightId">
+                                <!--Text="{Binding AirplaneToQueue.FlightId, 
+                                    UpdateSourceTrigger=PropertyChanged, 
+                                    ValidatesOnDataErrors=True}"-->
+                                <TextBox.Text>
+                                    <Binding Path="AirplaneToQueue.FlightId" 
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                             <TextBlock Grid.Row="1" Grid.Column="1"
                                        Margin="5, 2, 0, 2"
                                        FontSize="10"
                                        Foreground="Red"
                                        Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
-                                       ElementName=txtFlightId}" />
+                                       ElementName=txtFlightId,
+                                       Converter={StaticResource ErrorContentToMessageConverter}}" />
                         </Grid>
                         <Grid Margin="5">
                             <Grid.RowDefinitions>
@@ -90,16 +113,26 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Destination" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
-                                     x:Name="txtDestination"
-                                     Text="{Binding AirplaneToQueue.Destination, 
-                                            UpdateSourceTrigger=PropertyChanged, 
-                                            ValidatesOnDataErrors=True}"/>
+                                     x:Name="txtDestination">
+                                <!--Text="{Binding AirplaneToQueue.Destination, 
+                                    UpdateSourceTrigger=PropertyChanged, 
+                                    ValidatesOnDataErrors=True}"-->
+                                <TextBox.Text>
+                                    <Binding Path="AirplaneToQueue.Destination" 
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                             <TextBlock Grid.Row="1" Grid.Column="1"
                                        Margin="5, 2, 0, 2"
                                        FontSize="10"
                                        Foreground="Red"
                                        Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
-                                       ElementName=txtDestination}" />
+                                       ElementName=txtDestination,
+                                       Converter={StaticResource ErrorContentToMessageConverter}}" />
                         </Grid>
                         <Grid Margin="5">
                             <Grid.RowDefinitions>
@@ -117,17 +150,30 @@
                                        FontSize="10"/>
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
                                      x:Name="txtFlightTime"
-                                     Text="{Binding AirplaneToQueue.FlightDuration, 
-                                            UpdateSourceTrigger=LostFocus, 
-                                            StringFormat=F2,
-                                            Converter={StaticResource DoubleToStringConverter},
-                                            ValidatesOnDataErrors=True}"/>
+                                     Validation.ErrorTemplate="{x:Null}">
+                                <!--Text="{Binding AirplaneToQueue.FlightDuration, 
+                                           UpdateSourceTrigger=PropertyChanged, 
+                                           StringFormat=F2,
+                                           Converter={StaticResource DoubleToStringConverter},
+                                           ValidatesOnDataErrors=True}"-->
+                                <TextBox.Text>
+                                    <!--Converter="{StaticResource DoubleToStringConverter}"-->
+                                    <Binding Path="AirplaneToQueue.TxtFlightDuration"
+                                             UpdateSourceTrigger="PropertyChanged"
+                                             ValidatesOnDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                             <TextBlock Grid.Row="1" Grid.Column="1"
-                                       Margin="5, 2, 0, 2"
-                                       FontSize="10"
-                                       Foreground="Red"
-                                       Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
-                                       ElementName=txtFlightTime}" />
+                                    Margin="5, 2, 0, 2"
+                                    FontSize="10"
+                                    Foreground="Red"
+                                    Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                    ElementName=txtFlightTime,
+                                    Converter={StaticResource ErrorContentToMessageConverter}}" />
                         </Grid>
                     </StackPanel>
                 </GroupBox>
@@ -140,7 +186,20 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="btnAddFlight"
-                        Content="Queue for Takeoff"/>
+                        Content="Queue for Takeoff"
+                        Click="btnAddFlight_Click">
+                    <Button.IsEnabled>
+                        <Binding Path="AirplaneToQueue.CanAddAirplane"/>
+                        <!--<MultiBinding Converter="{StaticResource ValidationToBtnEnableConverter}"
+                                      >
+                            <Binding Path="AirplaneToQueue.CanAddAirplane"/>
+                            <Binding ElementName="txtName" Path="(Validation.HasError)" />
+                            <Binding ElementName="txtFlightId" Path="(Validation.HasError)" />
+                            <Binding ElementName="txtDestination" Path="(Validation.HasError)" />
+                            <Binding ElementName="txtFlightTime" Path="(Validation.HasError)" />
+                        </MultiBinding>-->
+                    </Button.IsEnabled>
+                </Button>
                 <Button Grid.Column="1"
                         x:Name="btnTakeOff"
                         Content="Clear for Takeoff"/>

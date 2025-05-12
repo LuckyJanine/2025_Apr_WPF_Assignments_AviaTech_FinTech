@@ -1,16 +1,28 @@
 ﻿using AirportSimulator.Models;
+using System.ComponentModel;
 
 namespace AirportSimulator
 {
-    internal class MainViewModel
+    internal class MainViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private ControlTower _controlTower;
-        private Airplane _airplaneToQueue = new Airplane();
+        public Airplane _airplaneToQueue = new Airplane();
 
         public Airplane AirplaneToQueue
         {
-            get => _airplaneToQueue;
-            set => _airplaneToQueue = value;
+            get { return _airplaneToQueue; }
+            set 
+            { 
+                _airplaneToQueue = value;
+                OnPropertyChanged(nameof(AirplaneToQueue));
+            }
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
