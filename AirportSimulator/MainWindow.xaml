@@ -210,7 +210,16 @@
                         </Grid>
                     </StackPanel>
                 </GroupBox>
-                <ListView Grid.Column="1" Margin="8">
+                <ListView Grid.Column="1" Margin="8"
+                          ItemsSource="{Binding Airplanes}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="70"/>
+                            <GridViewColumn Header="Id" DisplayMemberBinding="{Binding FlightId}" Width="70"/>
+                            <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Destination}" Width="100"/>
+                            <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding FlightDuration}" Width="100"/>
+                        </GridView>
+                    </ListView.View>
                 </ListView>
             </Grid>
             <Grid Grid.Row="1">
