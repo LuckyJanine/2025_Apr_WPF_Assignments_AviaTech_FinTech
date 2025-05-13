@@ -1,24 +1,35 @@
-﻿using System.Collections.ObjectModel;
-
-namespace AirportSimulator.Models
+﻿namespace AirportSimulator.Models
 {
     internal class ControlTower
     {
-        protected ObservableCollection<Airplane> airplanes;
+        private readonly int _maxCapacity = 100;
+        private List<Airplane> _airplanes;
         public ControlTower()
         {
-            airplanes = new ObservableCollection<Airplane>();
+            _airplanes = new List<Airplane>();
         }
 
-        public ObservableCollection<Airplane> Airplanes
+        public List<Airplane> Airplanes
         {
-            get => airplanes;
+            get => _airplanes;
         }
 
-        public bool TryAddAirplane(Airplane airplaneToQueue)
+        public (bool, string) TryAddAirplane(Airplane airplaneToQueue)
         {
-            airplanes.Add(airplaneToQueue);
-            return false;
+            string err = string.Empty;
+            if (airplaneToQueue.TrackerId == Guid.Empty)
+            {
+                err = "Tracker Id assignment failure.";
+                return (false, err);
+            } else if(_airplanes.Count >= _maxCapacity)
+            {
+                err = "Maximial number of flights queued up.";
+                return (false, err);
+            } else
+            {
+                _airplanes.Add(airplaneToQueue);
+                return (true, err);
+            }   
         }
     }
 }

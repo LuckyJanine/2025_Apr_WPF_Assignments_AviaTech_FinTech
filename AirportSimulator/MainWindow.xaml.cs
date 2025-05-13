@@ -22,7 +22,14 @@ namespace AirportSimulator
         {
             if ((DataContext is MainViewModel mv) && (sender is Button))
             {
-                bool ok = mv.QueueAirplaneForTakeoff();
+                var (ok, err) = mv.QueueAirplaneForTakeoff();
+                if (!ok && !string.IsNullOrEmpty(err))
+                {
+                    MessageBox.Show($"Can't queue: {err}");
+                } else if (!ok)
+                {
+                    MessageBox.Show($"Can't queue: Uncategorized error.");
+                } 
             }
         }
     }
