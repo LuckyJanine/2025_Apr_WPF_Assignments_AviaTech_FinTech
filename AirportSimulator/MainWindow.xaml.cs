@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace AirportSimulator
 {
@@ -26,35 +27,26 @@ namespace AirportSimulator
         }
     }
 
-    //public class ValidationsToBtnEnableConverter : IMultiValueConverter
-    //{
-    //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        return ((bool)values[0]) && (values.Skip(1).All(v => v is bool b && !b));
-    //    }
 
-    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
+    public class ValidationRuleStyleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var errors = value as ReadOnlyCollection<ValidationError>;
 
-    //public class ValidationRuleStyleConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        var errors = value as ReadOnlyCollection<ValidationError>;
-    //        if (errors == null || errors.Count == 0)
-    //            return false;
+            if(errors.Any(e => e.RuleInError != null && !(e.ErrorContent is string))) // an error from ValidationRules
+            {
+                return Brushes.Red;
+            }
 
-    //        return errors.Any(e => e.RuleInError != null && !(e.ErrorContent is string));
-    //    }
+            return Brushes.DarkGray;
+        }
 
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotSupportedException();
-    //    }
-    //}
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
 
     public class ErrorContentToMessageConverter : IValueConverter
     {

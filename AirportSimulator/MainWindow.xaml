@@ -8,9 +8,11 @@
         Title="Airport Simulator" Height="700" Width="650">
 
     <Window.Resources>
-        <local:DoubleToStringConverter x:Key="DoubleToStringConverter" />
+        
         <local:ErrorContentToMessageConverter x:Key="ErrorContentToMessageConverter"/>
         <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
+        <local:ValidationRuleStyleConverter x:Key="ValidationRuleStyleConverter"/>
+       
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -49,18 +51,33 @@
                             <TextBlock Text="Name" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
                                      x:Name="txtName">
-                                <!--Text="{Binding AirplaneToQueue.Name, 
-                                UpdateSourceTrigger=PropertyChanged, 
-                                ValidatesOnDataErrors=True}"-->
+                                <TextBox.BorderBrush>
+                                    <Binding RelativeSource="{RelativeSource Self}"
+                                             Path="(Validation.Errors)"
+                                             Converter="{StaticResource ValidationRuleStyleConverter}" />
+                                </TextBox.BorderBrush>
                                 <TextBox.Text>
                                     <Binding Path="AirplaneToQueue.Name" 
-                                        UpdateSourceTrigger="PropertyChanged"
-                                        ValidatesOnDataErrors="True">
+                                             UpdateSourceTrigger="PropertyChanged"
+                                             ValidatesOnDataErrors="True">
                                         <Binding.ValidationRules>
                                             <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </TextBox.Text>
+                                <!--<TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, 
+                                                                   Path=(Validation.Errors),
+                                                                   Converter={StaticResource ValidationRuleStyleConverter}}" 
+                                                                   Value="True">
+                                                <Setter Property="BorderBrush" Value="Red"/>
+                                                <Setter Property="BorderThickness" Value="1"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>-->
                             </TextBox>
                             <TextBlock  Grid.Row="1" Grid.Column="1"
                                         Margin="5, 2, 0, 2"
@@ -81,10 +98,16 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Flight ID" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
-                                     x:Name="txtFlightId">
+                                     x:Name="txtFlightId"
+                                     >
                                 <!--Text="{Binding AirplaneToQueue.FlightId, 
                                     UpdateSourceTrigger=PropertyChanged, 
                                     ValidatesOnDataErrors=True}"-->
+                                <TextBox.BorderBrush>
+                                    <Binding RelativeSource="{RelativeSource Self}"
+                                             Path="(Validation.Errors)"
+                                             Converter="{StaticResource ValidationRuleStyleConverter}" />
+                                </TextBox.BorderBrush>
                                 <TextBox.Text>
                                     <Binding Path="AirplaneToQueue.FlightId" 
                                              UpdateSourceTrigger="PropertyChanged">
@@ -117,6 +140,11 @@
                                 <!--Text="{Binding AirplaneToQueue.Destination, 
                                     UpdateSourceTrigger=PropertyChanged, 
                                     ValidatesOnDataErrors=True}"-->
+                                <TextBox.BorderBrush>
+                                    <Binding RelativeSource="{RelativeSource Self}"
+                                             Path="(Validation.Errors)"
+                                             Converter="{StaticResource ValidationRuleStyleConverter}" />
+                                </TextBox.BorderBrush>
                                 <TextBox.Text>
                                     <Binding Path="AirplaneToQueue.Destination" 
                                              UpdateSourceTrigger="PropertyChanged">
@@ -149,13 +177,17 @@
                                        VerticalAlignment="Center" 
                                        FontSize="10"/>
                             <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
-                                     x:Name="txtFlightTime"
-                                     Validation.ErrorTemplate="{x:Null}">
+                                     x:Name="txtFlightTime">
                                 <!--Text="{Binding AirplaneToQueue.FlightDuration, 
                                            UpdateSourceTrigger=PropertyChanged, 
                                            StringFormat=F2,
                                            Converter={StaticResource DoubleToStringConverter},
                                            ValidatesOnDataErrors=True}"-->
+                                <TextBox.BorderBrush>
+                                    <Binding RelativeSource="{RelativeSource Self}"
+                                             Path="(Validation.Errors)"
+                                             Converter="{StaticResource ValidationRuleStyleConverter}" />
+                                </TextBox.BorderBrush>
                                 <TextBox.Text>
                                     <!--Converter="{StaticResource DoubleToStringConverter}"-->
                                     <Binding Path="AirplaneToQueue.TxtFlightDuration"

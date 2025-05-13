@@ -7,7 +7,7 @@
         <Style TargetType="TextBox">
             <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
         </Style>
-        <!--<ControlTemplate x:Key="DefaultErrorTemplate">
+        <!--<ControlTemplate x:Key="ValidationRuleErrorTemplate">
             <DockPanel LastChildFill="True">
                 <Border BorderBrush="Red" BorderThickness="1">
                     <AdornedElementPlaceholder />
