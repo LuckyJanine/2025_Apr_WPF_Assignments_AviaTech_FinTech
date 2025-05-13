@@ -1,4 +1,5 @@
 ﻿using AirportSimulator.Models;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace AirportSimulator
@@ -8,9 +9,9 @@ namespace AirportSimulator
         public event PropertyChangedEventHandler PropertyChanged;
 
         private ControlTower _controlTower;
-        public Airplane _airplaneToQueue = new Airplane();
+        public AirplaneViewModel _airplaneToQueue = new AirplaneViewModel();
 
-        public Airplane AirplaneToQueue
+        public AirplaneViewModel AirplaneToQueue
         {
             get { return _airplaneToQueue; }
             set 
@@ -18,6 +19,21 @@ namespace AirportSimulator
                 _airplaneToQueue = value;
                 OnPropertyChanged(nameof(AirplaneToQueue));
             }
+        }
+
+        public ObservableCollection<Airplane> Airplanes
+        {
+            get => _controlTower.Airplanes;
+            set
+            {
+
+            }
+        }
+
+        public bool QueueAirplaneForTakeoff()
+        {
+            
+            return false;
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

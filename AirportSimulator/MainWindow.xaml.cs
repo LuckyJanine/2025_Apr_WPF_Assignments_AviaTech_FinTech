@@ -22,7 +22,7 @@ namespace AirportSimulator
         {
             if ((DataContext is MainViewModel mv) && (sender is Button))
             {
-                
+                bool ok = mv.QueueAirplaneForTakeoff();
             }
         }
     }

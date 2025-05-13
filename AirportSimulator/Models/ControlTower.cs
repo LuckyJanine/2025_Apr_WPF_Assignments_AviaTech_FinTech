@@ -9,5 +9,16 @@ namespace AirportSimulator.Models
         {
             airplanes = new ObservableCollection<Airplane>();
         }
+
+        public ObservableCollection<Airplane> Airplanes
+        {
+            get => airplanes;
+        }
+
+        public bool TryAddAirplane(Airplane airplaneToQueue)
+        {
+            airplanes.Add(airplaneToQueue);
+            return false;
+        }
     }
 }
