@@ -12,7 +12,8 @@
         <local:ErrorContentToMessageConverter x:Key="ErrorContentToMessageConverter"/>
         <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
         <local:ValidationRuleStyleConverter x:Key="ValidationRuleStyleConverter"/>
-       
+        <local:ValidationsToBtnEnableConverter x:Key="ValidationsToBtnEnableConverter"/>
+
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -221,15 +222,13 @@
                         Content="Queue for Takeoff"
                         Click="btnAddFlight_Click">
                     <Button.IsEnabled>
-                        <Binding Path="AirplaneToQueue.CanAddAirplane"/>
-                        <!--<MultiBinding Converter="{StaticResource ValidationToBtnEnableConverter}"
-                                      >
+                        <MultiBinding Converter="{StaticResource ValidationsToBtnEnableConverter}">
                             <Binding Path="AirplaneToQueue.CanAddAirplane"/>
                             <Binding ElementName="txtName" Path="(Validation.HasError)" />
                             <Binding ElementName="txtFlightId" Path="(Validation.HasError)" />
                             <Binding ElementName="txtDestination" Path="(Validation.HasError)" />
                             <Binding ElementName="txtFlightTime" Path="(Validation.HasError)" />
-                        </MultiBinding>-->
+                        </MultiBinding>
                     </Button.IsEnabled>
                 </Button>
                 <Button Grid.Column="1"

@@ -27,6 +27,21 @@ namespace AirportSimulator
         }
     }
 
+    public class ValidationsToBtnEnableConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool? canAdd = values[0] as bool?;
+            bool hasError = values.Skip(1).Any(e => e is bool b && b);
+            return canAdd == true && !hasError;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
 
     public class ValidationRuleStyleConverter : IValueConverter
     {
