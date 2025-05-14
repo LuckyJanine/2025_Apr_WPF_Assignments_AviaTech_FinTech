@@ -13,6 +13,7 @@
         <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
         <local:ValidationRuleStyleConverter x:Key="ValidationRuleStyleConverter"/>
         <local:ValidationsToBtnEnableConverter x:Key="ValidationsToBtnEnableConverter"/>
+        <local:TimeToStringConverter x:Key="TimeToStringConverter"/>
 
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
@@ -260,9 +261,9 @@
                         <GridViewColumn Header="Id" DisplayMemberBinding="{Binding FlightId}" Width="70"/>
                         <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Destination}" Width="100"/>
                         <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding FlightDuration}" Width="70"/>
-                        <GridViewColumn Header="Takeoff Time" DisplayMemberBinding="{Binding TakeoffAt}" Width="100"/>
+                        <GridViewColumn Header="Takeoff Time" DisplayMemberBinding="{Binding TakeoffAt, Converter={StaticResource TimeToStringConverter}}" Width="100"/>
                         <GridViewColumn Header="Flight Status" DisplayMemberBinding="{Binding FlightStatus}" Width="100"/>
-                        <GridViewColumn Header="Landed Time" DisplayMemberBinding="{Binding LandAt}" Width="120"/>
+                        <GridViewColumn Header="Landed Time" DisplayMemberBinding="{Binding LandAt, Converter={StaticResource TimeToStringConverter}}" Width="120"/>
                     </GridView>
                 </ListView.View>
             </ListView>

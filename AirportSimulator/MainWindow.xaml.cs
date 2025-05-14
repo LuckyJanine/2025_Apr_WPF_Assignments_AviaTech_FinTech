@@ -93,7 +93,7 @@ namespace AirportSimulator
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var errors = value as ReadOnlyCollection<ValidationError>;
+            ReadOnlyCollection<ValidationError> errors = value as ReadOnlyCollection<ValidationError>;
 
             if(errors.Any(e => e.RuleInError != null && !(e.ErrorContent is string))) // an error from ValidationRules
             {
@@ -171,6 +171,23 @@ namespace AirportSimulator
             // tells WPF binding engine a conversion failuer for it to create a ValidationError object
             return DependencyProperty.UnsetValue;
             // DON'T use binding.donothing
+        }
+    }
+
+    public class TimeToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is TimeOnly time)
+            {
+                return time.ToString("HH:mm:ss");
+            }
+            return string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
         }
     }
 
