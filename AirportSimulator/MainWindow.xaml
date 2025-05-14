@@ -8,7 +8,7 @@
         Title="Airport Simulator" Height="700" Width="650">
 
     <Window.Resources>
-        
+
         <local:ErrorContentToMessageConverter x:Key="ErrorContentToMessageConverter"/>
         <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
         <local:ValidationRuleStyleConverter x:Key="ValidationRuleStyleConverter"/>
@@ -50,8 +50,8 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name" VerticalAlignment="Center" />
-                            <TextBox Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center"
-                                     x:Name="txtName">
+                            <TextBox Grid.Column="1" Margin="5,0,0,17" VerticalAlignment="Bottom"
+                                     x:Name="txtName" Grid.RowSpan="2">
                                 <TextBox.BorderBrush>
                                     <Binding RelativeSource="{RelativeSource Self}"
                                              Path="(Validation.Errors)"
@@ -251,7 +251,9 @@
             </Grid>
             <ListView x:Name="lstvFlights"
                       Grid.Row="2" Margin="8"
-                      ItemsSource="{Binding Flights}">
+                      ItemsSource="{Binding Flights}"
+                      SelectionMode="Single"
+                      MouseDoubleClick="lstvFlights_MouseDoubleClick">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="70"/>

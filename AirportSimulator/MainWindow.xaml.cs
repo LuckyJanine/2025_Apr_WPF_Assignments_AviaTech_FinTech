@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace AirportSimulator
@@ -46,6 +47,26 @@ namespace AirportSimulator
                 if (lstvAirplaneQueue.SelectedItem is Airplane airplaneToTakeoff)
                 {
                     mv.TakeOff(airplaneToTakeoff.TrackerId);
+                }
+            }
+        }
+
+        private void lstvFlights_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is ListView))
+            {
+                if (lstvFlights.SelectedItem is not Airplane flight)
+                {
+                    return;
+                }
+                if (flight.CanReschedule)
+                {
+                    txtName.Text = flight.Name;
+                    txtFlightId.Text = flight.FlightId;
+                }
+                else
+                {
+                    MessageBox.Show($"Aircraft {flight.FlightId} hasn't landed yet.");
                 }
             }
         }
