@@ -20,8 +20,8 @@ namespace AirportSimulator.Models
         public event EventHandler<AirplaneEventArgs>? FlightStatusUpdated;
 
         private DispatcherTimer _dispatcherTimer;
-        public TimeOnly TakeoffAt { get; private set; }
-        public TimeOnly LandAt { get; private set; }
+        public TimeOnly? TakeoffAt { get; private set; }
+        public TimeOnly? LandAt { get; private set; }
 
         public Airplane(string name, string flightId, string destination, double flightDuration)
         {
@@ -32,6 +32,8 @@ namespace AirportSimulator.Models
             FlightDuration = flightDuration;
             FlightStatus = FlightStatus.QueuedForTakeoff;
             _dispatcherTimer = new DispatcherTimer();
+            TakeoffAt = null;
+            LandAt = null;
         }
 
         public void Takeoff()
