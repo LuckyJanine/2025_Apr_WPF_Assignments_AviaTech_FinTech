@@ -1,6 +1,7 @@
 ﻿using AirportSimulator.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media.Media3D;
 
 namespace AirportSimulator
@@ -83,7 +84,17 @@ namespace AirportSimulator
 
         private void OnFlightStatusUpdate(object? sender, AirplaneEventArgs e)
         {
-            LoadAirplanes();
+            if (((Airplane)sender).TrackerId == e.Tracker)
+            {
+                LoadAirplanes();
+                if (e.AirplaneEventType == Enums.AirplaneEventType.Landed)
+                {
+                    ((Airplane)sender).FlightStatusUpdated -= OnFlightStatusUpdate;
+                }
+            } else
+            {
+                MessageBox.Show("Error with tracking.");
+            }
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
