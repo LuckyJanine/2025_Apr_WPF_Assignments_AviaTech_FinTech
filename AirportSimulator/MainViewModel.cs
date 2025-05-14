@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media.Media3D;
 
 namespace AirportSimulator
 {
@@ -31,6 +30,7 @@ namespace AirportSimulator
             set
             {
                 _airplaneInQueue = value;
+                OnPropertyChanged(nameof(AirplanesInQueue));
             }
         }
 
@@ -40,6 +40,7 @@ namespace AirportSimulator
             set
             {
                 _flights = value;
+                OnPropertyChanged(nameof(Flights));
             }
         }
 
@@ -56,28 +57,37 @@ namespace AirportSimulator
             {
                 AirplaneToQueue.Reset();
                 airplaneToQueue.FlightStatusUpdated += OnFlightStatusUpdate;
-                LoadAirplanes();
+                LoadAirplaneQueue();
             }
             return (ok, err);
         }
 
-        public void TakeOff(Guid trackerId)
+        public void TakeOff(Airplane airplane)
         {
-            _controlTower.TakeOff(trackerId);
+            AirplanesInQueue.Remove(airplane);
+            _controlTower.TakeOff(airplane.TrackerId);
         }
 
-        private void LoadAirplanes()
+        private void LoadAirplaneQueue()
         {
             AirplanesInQueue.Clear();
-            Flights.Clear();
             foreach (var airplane in _controlTower.Airplanes)
             {
                 if (airplane.FlightStatus == Enums.FlightStatus.QueuedForTakeoff)
                 {
                     AirplanesInQueue.Add(airplane);
-                } else
+                }
+            }
+        }
+
+        private void RefreshFlightStatus()
+        {
+            Flights.Clear();
+            foreach (var flight in _controlTower.Airplanes)
+            {
+                if (flight.FlightStatus != Enums.FlightStatus.QueuedForTakeoff)
                 {
-                    Flights.Add(airplane);
+                    Flights.Add(flight);
                 }
             }
         }
@@ -86,7 +96,7 @@ namespace AirportSimulator
         {
             if (((Airplane)sender).TrackerId == e.Tracker)
             {
-                LoadAirplanes();
+                RefreshFlightStatus();
                 if (e.AirplaneEventType == Enums.AirplaneEventType.Landed)
                 {
                     ((Airplane)sender).FlightStatusUpdated -= OnFlightStatusUpdate;

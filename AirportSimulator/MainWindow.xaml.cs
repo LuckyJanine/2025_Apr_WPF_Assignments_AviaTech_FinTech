@@ -46,7 +46,8 @@ namespace AirportSimulator
             {
                 if (lstvAirplaneQueue.SelectedItem is Airplane airplaneToTakeoff)
                 {
-                    mv.TakeOff(airplaneToTakeoff.TrackerId);
+                    lstvAirplaneQueue.SelectedItem = null;
+                    mv.TakeOff(airplaneToTakeoff);
                 }
             }
         }
