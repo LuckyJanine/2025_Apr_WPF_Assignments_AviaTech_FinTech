@@ -1,6 +1,7 @@
 ﻿using AirportSimulator.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Media.Media3D;
 
 namespace AirportSimulator
 {
@@ -8,7 +9,8 @@ namespace AirportSimulator
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private ObservableCollection<Airplane> _airplanes = new ObservableCollection<Airplane>();
+        private ObservableCollection<Airplane> _airplaneInQueue = new ObservableCollection<Airplane>();
+        private ObservableCollection<Airplane> _flights = new ObservableCollection<Airplane>();
         private ControlTower _controlTower = new ControlTower();
         public AirplaneViewModel _airplaneToQueue = new AirplaneViewModel();
 
@@ -22,12 +24,21 @@ namespace AirportSimulator
             }
         }
 
-        public ObservableCollection<Airplane> Airplanes
+        public ObservableCollection<Airplane> AirplanesInQueue
         {
-            get => _airplanes;
+            get => _airplaneInQueue;
             set
             {
-                _airplanes = value;
+                _airplaneInQueue = value;
+            }
+        }
+
+        public ObservableCollection<Airplane> Flights
+        {
+            get => _flights;
+            set
+            {
+                _flights = value;
             }
         }
 
@@ -42,18 +53,37 @@ namespace AirportSimulator
             var (ok, err) = _controlTower.TryAddAirplane(airplaneToQueue);
             if (ok && string.IsNullOrEmpty(err))
             {
+                AirplaneToQueue.Reset();
+                airplaneToQueue.FlightStatusUpdated += OnFlightStatusUpdate;
                 LoadAirplanes();
             }
             return (ok, err);
         }
 
+        public void TakeOff(Guid trackerId)
+        {
+            _controlTower.TakeOff(trackerId);
+        }
+
         private void LoadAirplanes()
         {
-            _airplanes.Clear();
+            AirplanesInQueue.Clear();
+            Flights.Clear();
             foreach (var airplane in _controlTower.Airplanes)
             {
-                _airplanes.Add( airplane );
+                if (airplane.FlightStatus == Enums.FlightStatus.QueuedForTakeoff)
+                {
+                    AirplanesInQueue.Add(airplane);
+                } else
+                {
+                    Flights.Add(airplane);
+                }
             }
+        }
+
+        private void OnFlightStatusUpdate(object? sender, AirplaneEventArgs e)
+        {
+            LoadAirplanes();
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

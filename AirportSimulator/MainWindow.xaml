@@ -210,8 +210,11 @@
                         </Grid>
                     </StackPanel>
                 </GroupBox>
-                <ListView Grid.Column="1" Margin="8"
-                          ItemsSource="{Binding Airplanes}">
+                <ListView x:Name="lstvAirplaneQueue"
+                          Grid.Column="1" Margin="8"
+                          ItemsSource="{Binding AirplanesInQueue}"
+                          SelectionChanged="lstvAirplaneQueue_SelectionChanged"
+                          SelectionMode="Single">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="70"/>
@@ -242,10 +245,25 @@
                 </Button>
                 <Button Grid.Column="1"
                         x:Name="btnTakeOff"
-                        Content="Clear for Takeoff"/>
+                        Content="Clear for Takeoff"
+                        IsEnabled="False"
+                        Click="btnClearForTakeoff_Click"/>
             </Grid>
-            <ListBox Grid.Row="2" Margin="8">
-            </ListBox>
+            <ListView x:Name="lstvFlights"
+                      Grid.Row="2" Margin="8"
+                      ItemsSource="{Binding Flights}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="70"/>
+                        <GridViewColumn Header="Id" DisplayMemberBinding="{Binding FlightId}" Width="70"/>
+                        <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Destination}" Width="100"/>
+                        <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding FlightDuration}" Width="70"/>
+                        <GridViewColumn Header="Takeoff Time" DisplayMemberBinding="{Binding TakeoffAt}" Width="100"/>
+                        <GridViewColumn Header="Flight Status" DisplayMemberBinding="{Binding FlightStatus}" Width="100"/>
+                        <GridViewColumn Header="Landed Time" DisplayMemberBinding="{Binding LandAt}" Width="120"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
     </Grid>
 </Window>

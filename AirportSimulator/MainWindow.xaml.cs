@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using AirportSimulator.Models;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,22 @@ namespace AirportSimulator
                 {
                     MessageBox.Show($"Can't queue: Uncategorized error.");
                 } 
+            }
+        }
+
+        private void lstvAirplaneQueue_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btnTakeOff.IsEnabled = lstvAirplaneQueue.SelectedItem is Airplane;
+        }
+
+        private void btnClearForTakeoff_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is Button))
+            {
+                if (lstvAirplaneQueue.SelectedItem is Airplane airplaneToTakeoff)
+                {
+                    mv.TakeOff(airplaneToTakeoff.TrackerId);
+                }
             }
         }
     }

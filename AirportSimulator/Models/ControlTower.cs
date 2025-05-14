@@ -31,5 +31,14 @@
                 return (true, err);
             }   
         }
+
+        public void TakeOff(Guid tracker)
+        {
+            var flight = _airplanes.FirstOrDefault(a => a.TrackerId == tracker);
+            if (flight != null) 
+            {
+                flight.Takeoff();
+            }
+        }
     }
 }

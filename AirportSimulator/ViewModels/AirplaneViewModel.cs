@@ -138,7 +138,7 @@ namespace AirportSimulator.Models
                         }
                         if (!_isFlightDurationValid)
                         {
-                            return "3mins <= duration <= 24hrs.";
+                            return "6mins <= duration <= 24hrs.";
                         }
                         break;
                 }
@@ -176,8 +176,8 @@ namespace AirportSimulator.Models
         
         private void ValidateFlightDuration(double flightDuration)
         {
-            // input validation [assume]: no flight lasts longer than 24 hours or less then 3 mins
-            if (flightDuration > 24.0 || flightDuration < 0.05)
+            // input validation [assume]: no flight lasts longer than 24 hours or less then 6 mins
+            if (flightDuration > 24.0 || flightDuration < 0.1)
             {
                 _isFlightDurationValid = false;
             } else
@@ -192,6 +192,14 @@ namespace AirportSimulator.Models
             CanAddAirplane = !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(FlightId)
                 && !string.IsNullOrWhiteSpace(Destination) 
                 && _isDurationConvertable && _isFlightDurationValid;
+        }
+
+        public void Reset()
+        {
+            Name = string.Empty;
+            FlightId = string.Empty;
+            Destination = string.Empty;
+            TxtFlightDuration = string.Empty;
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
