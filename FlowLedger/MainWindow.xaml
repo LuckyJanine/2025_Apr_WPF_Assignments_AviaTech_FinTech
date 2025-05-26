@@ -1,0 +1,28 @@
+﻿<Window x:Class="FlowLedger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FlowLedger"
+        mc:Ignorable="d"
+        Title="Flow Ledger" Height="700" Width="650">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.6*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="25, 10">
+            <GroupBox Header="Customer Information">
+                
+            </GroupBox>
+        </Grid>
+        <TabControl Grid.Row="1"
+            Width="600" >
+            <TabItem Header="Account">
+            </TabItem>
+            <TabItem Header="Transaction">
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
