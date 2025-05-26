@@ -7,10 +7,12 @@ namespace FlowLedger
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private CustomerViewModel _currentCustomer;
+        private DateTime _transactionDate;
 
         public MainViewModel()
         {
             _currentCustomer = new CustomerViewModel();
+            _transactionDate = DateTime.Now.Date;
         }
 
         public CustomerViewModel CurrentCustomer
@@ -20,6 +22,16 @@ namespace FlowLedger
             { 
                 _currentCustomer = value;
                 OnPropertyChanged(nameof(CurrentCustomer));
+            }
+        }
+
+        public DateTime TransactionDate
+        {
+            get => _transactionDate;
+            set
+            {
+                _transactionDate = value;
+                OnPropertyChanged(nameof(TransactionDate));
             }
         }
 

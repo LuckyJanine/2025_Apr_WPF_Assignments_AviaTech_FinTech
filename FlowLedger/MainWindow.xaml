@@ -111,12 +111,25 @@
                 </Grid>
             </GroupBox>
         </Grid>
-        <TabControl Grid.Row="1"
-            Width="600" >
-            <TabItem Header="Account">
-            </TabItem>
-            <TabItem Header="Transaction">
-            </TabItem>
-        </TabControl>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Calendar VerticalAlignment="Center"
+                    SelectedDate="{Binding TransactionDate, StringFormat='{}{0:yyyy-MM-dd}'}" >
+                    <Calendar.LayoutTransform>
+                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                    </Calendar.LayoutTransform>
+                </Calendar>
+            </Grid>
+            <TabControl Grid.Column="1">
+                <TabItem Header="Expense">
+                </TabItem>
+                <TabItem Header="Income">
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>
