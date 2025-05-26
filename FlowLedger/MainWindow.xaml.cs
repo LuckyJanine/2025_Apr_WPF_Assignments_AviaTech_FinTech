@@ -1,13 +1,5 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FlowLedger
 {
@@ -19,6 +11,24 @@ namespace FlowLedger
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
+        }
+    }
+
+    public class ValueIsNotNullOrEmpty : ValidationRule
+    {
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            string str = value as string;
+
+            if (!string.IsNullOrEmpty(str))
+            {
+                return ValidationResult.ValidResult;
+            }
+            else
+            {
+                return new ValidationResult(false, "* Required");
+            }
         }
     }
 }

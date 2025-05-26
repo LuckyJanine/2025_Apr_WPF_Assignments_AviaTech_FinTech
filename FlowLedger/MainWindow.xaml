@@ -8,6 +8,9 @@
         Title="Flow Ledger" Height="700" Width="650">
 
     <Window.Resources>
+
+        <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
+
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="16" />
         </Style>
@@ -42,11 +45,21 @@
                     <TextBox x:Name="txtID"
                              Grid.Row="0"
                              Grid.Column="1">
+                        <TextBox.Text>
+                            <Binding Path="CurrentCustomer.ID"
+                                     UpdateSourceTrigger="PropertyChanged"
+                                     ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
                     </TextBox>
                     <TextBlock  Grid.Row="0" Grid.Column="2"
                                 Margin="5, 2, 0, 2"
-                                FontSize="10"
+                                FontSize="12"
                                 Foreground="Red"
+                                VerticalAlignment="Center"
                                 Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
                                 ElementName=txtID}" />
                     <TextBlock Grid.Row="1" Margin="8, 0"
@@ -55,11 +68,21 @@
                     <TextBox x:Name="txtLastName"
                              Grid.Row="1"
                              Grid.Column="1">
+                        <TextBox.Text>
+                            <Binding Path="CurrentCustomer.LastName"
+                                     UpdateSourceTrigger="PropertyChanged"
+                                     ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
                     </TextBox>
                     <TextBlock  Grid.Row="1" Grid.Column="2"
                                 Margin="5, 2, 0, 2"
-                                FontSize="10"
+                                FontSize="12"
                                 Foreground="Red"
+                                VerticalAlignment="Center"
                                 Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
                                 ElementName=txtLastName}" />
                     <TextBlock Grid.Row="2" Margin="8, 0"
@@ -68,11 +91,21 @@
                     <TextBox x:Name="txtFirstName"
                              Grid.Row="2"
                              Grid.Column="1">
+                        <TextBox.Text>
+                            <Binding Path="CurrentCustomer.FirstName"
+                                     UpdateSourceTrigger="PropertyChanged"
+                                     ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
                     </TextBox>
                     <TextBlock  Grid.Row="2" Grid.Column="2"
                                 Margin="5, 2, 0, 2"
-                                FontSize="10"
+                                FontSize="12"
                                 Foreground="Red"
+                                VerticalAlignment="Center"
                                 Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
                                 ElementName=txtFirstName}" />
                 </Grid>
