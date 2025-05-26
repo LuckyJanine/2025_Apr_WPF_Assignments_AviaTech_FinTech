@@ -12,6 +12,12 @@ namespace FlowLedger
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+            InitializeUI();
+        }
+
+        private void InitializeUI()
+        {
+
         }
     }
 

@@ -1,27 +1,51 @@
-﻿using FlowLedger.ViewModels;
+﻿using FlowLedger.Enums;
+using FlowLedger.ViewModels;
 using System.ComponentModel;
 
 namespace FlowLedger
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
+        public readonly IEnumerable<TransactionType> CategoryTypes 
+            = Enum.GetValues(typeof(TransactionType)).Cast<TransactionType>();
+        private TransactionType _selectedTransactionType = TransactionType.Spend;
+
+        public HashSet<string> CategoryNames { get; set; } = new HashSet<string>
+        {
+            "Uncategorized",
+            "Salary",
+            "Food",
+            "Rent"
+        };
+
         public event PropertyChangedEventHandler? PropertyChanged;
-        private CustomerViewModel _currentCustomer;
+
+        private string _selectedCategoryName;
         private DateTime _transactionDate;
 
         public MainViewModel()
         {
-            _currentCustomer = new CustomerViewModel();
-            _transactionDate = DateTime.Now.Date;
+            SelectedCategoryName = CategoryNames.First();
+            TransactionDate = DateTime.Now.Date;
         }
 
-        public CustomerViewModel CurrentCustomer
+        public TransactionType SelectedTransactionType
         {
-            get { return _currentCustomer; }
+            get { return _selectedTransactionType; }
             set 
             { 
-                _currentCustomer = value;
-                OnPropertyChanged(nameof(CurrentCustomer));
+                _selectedTransactionType = value; 
+                OnPropertyChanged(nameof(SelectedTransactionType));
+            }
+        }
+
+        public string SelectedCategoryName
+        {
+            get => _selectedCategoryName;
+            set
+            {
+                _selectedCategoryName = value;
+                OnPropertyChanged(nameof(SelectedCategoryName));
             }
         }
 
