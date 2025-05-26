@@ -95,7 +95,13 @@
                 </Calendar>
             </Grid>
             <Grid Grid.Column="1">
-                <TabControl Grid.Row="1" Margin="10, 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TabControl x:Name="tbcCategoryType"
+                            SelectionChanged="tbcCategoryType_SelectionChanged"
+                    Grid.Row="0" Margin="10, 5">
                     <TabItem Header="Expense" FontSize="14">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -133,6 +139,10 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
+                <Button Grid.Row="1" Margin="20, 2"
+                        Content="Confirm Transaction"
+                        FontSize="16">
+                </Button>
             </Grid>
         </Grid>
     </Grid>

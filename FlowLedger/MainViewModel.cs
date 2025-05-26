@@ -6,8 +6,6 @@ namespace FlowLedger
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
-        public readonly IEnumerable<TransactionType> CategoryTypes 
-            = Enum.GetValues(typeof(TransactionType)).Cast<TransactionType>();
         private TransactionType _selectedTransactionType = TransactionType.Spend;
 
         public HashSet<string> CategoryNames { get; set; } = new HashSet<string>
