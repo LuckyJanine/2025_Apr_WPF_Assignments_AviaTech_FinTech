@@ -56,7 +56,7 @@
                         </TextBox.Text>-->
                     </TextBox>
                     <Button  Grid.Row="0" Grid.Column="2"
-                             Margin="8, 0, 8, 0"
+                             Margin="8, 2, 8, 2"
                              FontSize="16"
                              Content="Add"
                              />
@@ -179,7 +179,7 @@
                             <TextBlock Margin="10"
                                 VerticalAlignment="Center" FontSize="14" Text="Transaction Date:"/>
                             <TextBlock VerticalAlignment="Center" FontStyle="Italic"
-                                       Grid.Column="1" Text="{Binding TransactionDate, StringFormat='{}{0:yyyy-MM-dd, dddd}'}" />
+                                       Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd, dddd}'}" />
                         </Grid>
                     </TabItem>
                 </TabControl>
