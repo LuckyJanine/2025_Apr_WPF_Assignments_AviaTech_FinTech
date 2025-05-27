@@ -23,11 +23,11 @@ namespace FlowLedger
                     string header = selectedTab.Header?.ToString() ?? string.Empty;
                     switch (header)
                     {
-                        case "Expense":
-                            mv.SelectedTransactionType = Enums.TransactionType.Spend;
-                            break;
                         case "Income":
                             mv.SelectedTransactionType = Enums.TransactionType.Revenue;
+                            break;
+                        case "Expense":
+                            mv.SelectedTransactionType = Enums.TransactionType.Spend;
                             break;
                     }
                 }

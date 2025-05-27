@@ -1,5 +1,4 @@
 ﻿using FlowLedger.Enums;
-using FlowLedger.ViewModels;
 using System.ComponentModel;
 
 namespace FlowLedger
