@@ -1,11 +1,16 @@
 ﻿using FlowLedger.Enums;
+using FlowLedger.ViewModels;
 using System.ComponentModel;
 
 namespace FlowLedger
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
-        private TransactionType _selectedTransactionType = TransactionType.Spend;
+        public HashSet<string> CURRENCIES { get; } = new HashSet<string> 
+        {
+            "SEK", 
+            "EUR" 
+        };
 
         public HashSet<string> CategoryNames { get; set; } = new HashSet<string>
         {
@@ -15,15 +20,19 @@ namespace FlowLedger
             "Rent"
         };
 
+        private TransactionType _selectedTransactionType = TransactionType.Spend;
+
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private string _selectedCategoryName;
-        private DateTime _transactionDate;
+
+        private TransactionViewModel _transactionVM;
 
         public MainViewModel()
         {
             SelectedCategoryName = CategoryNames.First();
-            TransactionDate = DateTime.Now.Date;
+            _transactionVM = new TransactionViewModel();
         }
 
         public TransactionType SelectedTransactionType
@@ -46,13 +55,13 @@ namespace FlowLedger
             }
         }
 
-        public DateTime TransactionDate
+        public TransactionViewModel TransactionVM
         {
-            get => _transactionDate;
+            get => _transactionVM;
             set
             {
-                _transactionDate = value;
-                OnPropertyChanged(nameof(TransactionDate));
+                _transactionVM = value;
+                OnPropertyChanged(nameof(TransactionVM));
             }
         }
 
