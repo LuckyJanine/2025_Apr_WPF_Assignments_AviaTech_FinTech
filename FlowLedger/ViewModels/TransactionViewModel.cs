@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 
 namespace FlowLedger.ViewModels
 {
@@ -109,7 +110,8 @@ namespace FlowLedger.ViewModels
         private decimal? ConvertTransactionAmount(string transactionAmount)
         {
             transactionAmount = transactionAmount.Trim();
-            if (decimal.TryParse(transactionAmount, out decimal amount))
+            transactionAmount = transactionAmount.Replace(',', '.');
+            if (decimal.TryParse(transactionAmount, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount))
             {
                 _isAmountConvertable = true;
                 return amount;
