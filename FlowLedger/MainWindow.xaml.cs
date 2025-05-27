@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace FlowLedger
@@ -12,6 +13,30 @@ namespace FlowLedger
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+        }
+
+        private void btnAddCategory_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is Button))
+            {
+                string categoryInput = txtCategoryName.Text;
+                if (!string.IsNullOrWhiteSpace(categoryInput))
+                {
+                    string categoryToAdd = char.ToUpper(categoryInput[0]) + categoryInput.Substring(1).ToLower();
+                    var (success, error) = mv.AddNewCategory(categoryToAdd);
+                    if (!success)
+                    {
+                        MessageBox.Show($"Adding Failed.\n{error}");
+                    } else
+                    {
+                        txtCategoryName.Text = string.Empty;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please type a new Category to add.");
+                }
+            }
         }
 
         private void tbcCategoryType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -48,6 +73,28 @@ namespace FlowLedger
             else
             {
                 return new ValidationResult(false, "* Required");
+            }
+        }
+    }
+
+    public class ValueWithoutSpecialChars : ValidationRule
+    {
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            string str = value as string;
+            bool validInput = Regex.IsMatch(str, @"^[a-zA-Z0-9 _-]*$");
+
+            if (!string.IsNullOrEmpty(str) && validInput)
+            {
+                return ValidationResult.ValidResult;
+            }
+            else if (string.IsNullOrEmpty(str))
+            {
+                return ValidationResult.ValidResult;
+            }
+            else
+            {
+                return new ValidationResult(false, "No special char.");
             }
         }
     }

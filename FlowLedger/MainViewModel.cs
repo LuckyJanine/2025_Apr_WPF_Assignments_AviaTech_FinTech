@@ -1,5 +1,6 @@
 ﻿using FlowLedger.Enums;
 using FlowLedger.ViewModels;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace FlowLedger
@@ -12,15 +13,17 @@ namespace FlowLedger
             "EUR" 
         };
 
-        public HashSet<string> CategoryNames { get; set; } = new HashSet<string>
+        private HashSet<string> _categoryNames = new HashSet<string>
         {
             "Uncategorized",
             "Salary",
             "Food",
             "Rent"
         };
+        public ObservableCollection<string> CategoryNamesView { get; } = new();
 
         private TransactionType _selectedTransactionType = TransactionType.Spend;
+        private string _newCategoryToAdd;
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -31,8 +34,24 @@ namespace FlowLedger
 
         public MainViewModel()
         {
-            SelectedCategoryName = CategoryNames.First();
+            CategoryNamesView = new ObservableCollection<string>(_categoryNames);
+            SelectedCategoryName = _categoryNames.First();
             _transactionVM = new TransactionViewModel();
+        }
+
+        public string NewCategoryToAdd
+        {
+            get => _newCategoryToAdd;
+            set
+            {
+                _newCategoryToAdd = value;
+                OnPropertyChanged(nameof(NewCategoryToAdd));
+            }
+        }
+
+        public IEnumerable<string> CategoryNames
+        {
+            get => _categoryNames;
         }
 
         public TransactionType SelectedTransactionType
@@ -63,6 +82,27 @@ namespace FlowLedger
                 _transactionVM = value;
                 OnPropertyChanged(nameof(TransactionVM));
             }
+        }
+
+        public (bool, string) AddNewCategory(string newCategory)
+        {
+            bool ok = _categoryNames.Add(newCategory);
+            string errorMsg = string.Empty;
+            if (ok)
+            {
+                CategoryNamesView.Clear();
+                foreach (var category in _categoryNames)
+                {
+                    CategoryNamesView.Add(category);
+                }
+                SelectedCategoryName = _categoryNames.First();
+                return (ok, errorMsg);
+            }
+            else 
+            {
+                errorMsg = "Can't add. Already exist.";
+            }
+            return (ok, errorMsg);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
