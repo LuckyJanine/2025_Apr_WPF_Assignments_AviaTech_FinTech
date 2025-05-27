@@ -117,7 +117,7 @@
                             <TextBlock  Margin="10"
                                         VerticalAlignment="Center" FontSize="14" Text="Transaction Date:"/>
                             <TextBlock VerticalAlignment="Center" FontStyle="Italic"
-                                       Grid.Column="1" Text="{Binding TransactionDate, StringFormat='{}{0:yyyy-MM-dd, dddd}'}" />
+                                       Grid.Column="1" Text="{Binding TransactionDate, StringFormat='{}{0:yyyy-MM-dd    dddd}'}" />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Expense" FontSize="14">
