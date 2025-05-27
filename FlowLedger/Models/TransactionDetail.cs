@@ -7,7 +7,7 @@
         public decimal Amount { get; init; }
         public string Currency { get; init; }
 
-        public TransactionCategory transactionCategory { get; init; }
+        public TransactionCategory Category { get; init; }
         public string Description { get; init; }
 
         public TransactionDetail(decimal amount, string currency,
@@ -15,6 +15,10 @@
             DateTime? transactionDate = null)
         {
             Id = Guid.NewGuid();
+            Amount = amount;
+            Currency = currency;
+            Category = categroy;
+            Description = description;
             CreationDate = transactionDate;
             if (transactionDate != null)
             {

@@ -19,7 +19,7 @@
             <Setter Property="Margin" Value="2" />
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"/>
@@ -82,7 +82,7 @@
                                 <Setter Property="IsEnabled" Value="False" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding (Validation.HasError), ElementName=txtCategoryName}" Value="False">
-                                       <Setter Property="IsEnabled" Value="True" />
+                                        <Setter Property="IsEnabled" Value="True" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -116,42 +116,40 @@
                 </Calendar>
             </Grid>
             <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="4*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
                 <TabControl x:Name="tbcCategoryType"
                             SelectionChanged="tbcCategoryType_SelectionChanged"
                             Grid.Row="0" Margin="10, 5">
                     <TabItem Header="Income" FontSize="14">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="11*"/>
+                                <ColumnDefinition Width="108*"/>
+                                <ColumnDefinition Width="296*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Margin="10, 0, 0, 0"
-                                       VerticalAlignment="Center" FontSize="14" Text="Transaction Date:"/>
-                            <TextBlock VerticalAlignment="Center" FontStyle="Italic"
-                                       Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd    dddd}'}" />
-                            <TextBlock Margin="10, 0, 0, 0" Grid.Row="1"
-                                       VerticalAlignment="Center" FontSize="14" Text="Amount:"/>
-                            <Grid Grid.Row="1" Grid.Column="1">
+                            <TextBlock Margin="10,0,0,0"
+                                       VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Text="Transaction Date:" Grid.ColumnSpan="2"/>
+                            <TextBlock VerticalAlignment="Center" FontStyle="Italic" FontWeight="SemiBold"
+                                       Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd    dddd}'}" Grid.ColumnSpan="2" Margin="107,0,0,0" />
+                            <TextBlock Margin="10,0,0,0" Grid.Row="1"
+                                       VerticalAlignment="Center" FontSize="14" Text="Amount:" Grid.ColumnSpan="2"/>
+                            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="107,0,0,34" Grid.RowSpan="2">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="txtAmount"
+                                <TextBox x:Name="txtIncomeAmount"
                                          VerticalAlignment="Center"
                                          FontSize="16"
                                          >
                                     <TextBox.Text>
-                                        <Binding Path="TransactionVM.TxtAmount"
+                                        <Binding Path="TransactionVM.TxtIncomeAmount"
                                                  UpdateSourceTrigger="PropertyChanged"
                                                  ValidatesOnDataErrors="True"
                                                  >
@@ -165,49 +163,123 @@
                                            Margin="5, 2, 0, 2"
                                            FontSize="12" Foreground="Red"
                                            Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
-                                           ElementName=txtAmount}"/>
+                                           ElementName=txtIncomeAmount}"/>
                             </Grid>
-                            <TextBlock Margin="10, 0, 0, 0" Grid.Row="2"
-                                       VerticalAlignment="Center" FontSize="14" Text="Currency:"/>
-                            <ComboBox Margin="2, 0, 0, 0" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
+                            <TextBlock Margin="10,0,0,0" Grid.Row="2"
+                                       VerticalAlignment="Center" FontSize="14" Text="Currency:" Grid.ColumnSpan="2"/>
+                            <ComboBox Margin="2,0,0,0" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"
                                       ItemsSource="{Binding CURRENCIES}"
                                       SelectedItem="{Binding TransactionVM.CurrencyCode}">
                             </ComboBox>
-                            <TextBlock Margin="10, 0, 0, 0" Grid.Row="3"
-                                       VerticalAlignment="Center" FontSize="14" Text="Description:"/>
-                            <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"
-                                     FontSize="16">
+                            <TextBlock Margin="10,0,0,0" Grid.Row="3"
+                                       VerticalAlignment="Center" FontSize="14" Text="Description:" Grid.ColumnSpan="2"/>
+                            <TextBox Grid.Row="3" Grid.Column="2" 
+                                     VerticalAlignment="Center"
+                                     FontSize="16" Margin="2,0,2,0">
                                 <TextBox.Text>
                                     <Binding Path="TransactionVM.Description"
                                              UpdateSourceTrigger="PropertyChanged"
                                              />
                                 </TextBox.Text>
                             </TextBox>
+                            <Button Grid.Row="4" Grid.ColumnSpan="3" Margin="20, 2"
+                                    Content="Confirm Transaction - Income"
+                                    FontSize="16"
+                                    Click="btnConfirmTransaction_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=txtIncomeAmount}" Value="False">
+                                                <Setter Property="IsEnabled" Value="True" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Expense" FontSize="14">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="11*"/>
+                                <ColumnDefinition Width="108*"/>
+                                <ColumnDefinition Width="296*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Margin="10"
-                                VerticalAlignment="Center" FontSize="14" Text="Transaction Date:"/>
-                            <TextBlock VerticalAlignment="Center" FontStyle="Italic"
-                                       Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd, dddd}'}" />
+                            <TextBlock Margin="10,0,0,0"
+                                       VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Text="Transaction Date:" Grid.ColumnSpan="2"/>
+                            <TextBlock VerticalAlignment="Center" FontStyle="Italic" FontWeight="SemiBold"
+                                       Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd    dddd}'}" Grid.ColumnSpan="2" Margin="107,0,0,0" />
+                            <TextBlock Margin="10,0,0,0" Grid.Row="1"
+                                       VerticalAlignment="Center" FontSize="14" Text="Amount:" Grid.ColumnSpan="2"/>
+                            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="107,0,0,34" Grid.RowSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="txtExpenseAmount"
+                                         VerticalAlignment="Center"
+                                         FontSize="16"
+                                         >
+                                    <TextBox.Text>
+                                        <Binding Path="TransactionVM.TxtExpenseAmount"
+                                                 UpdateSourceTrigger="PropertyChanged"
+                                                 ValidatesOnDataErrors="True"
+                                                 >
+                                            <Binding.ValidationRules>
+                                                <local:ValueIsNotNullOrEmpty ValidatesOnTargetUpdated="False" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center"
+                                           Margin="5, 2, 0, 2"
+                                           FontSize="12" Foreground="Red"
+                                           Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                           ElementName=txtExpenseAmount}"/>
+                            </Grid>
+                            <TextBlock Margin="10,0,0,0" Grid.Row="2"
+                                       VerticalAlignment="Center" FontSize="14" Text="Currency:" Grid.ColumnSpan="2"/>
+                            <ComboBox Margin="2,0,0,0" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"
+                                      ItemsSource="{Binding CURRENCIES}"
+                                      SelectedItem="{Binding TransactionVM.CurrencyCode}">
+                            </ComboBox>
+                            <TextBlock Margin="10,0,0,0" Grid.Row="3"
+                                       VerticalAlignment="Center" FontSize="14" Text="Description:" Grid.ColumnSpan="2"/>
+                            <TextBox Grid.Row="3" Grid.Column="2" 
+                                     VerticalAlignment="Center"
+                                     FontSize="16" Margin="2,0,2,0">
+                                <TextBox.Text>
+                                    <Binding Path="TransactionVM.Description"
+                                             UpdateSourceTrigger="PropertyChanged"
+                                             />
+                                </TextBox.Text>
+                            </TextBox>
+                            <Button Grid.Row="4" Grid.ColumnSpan="3" Margin="20, 2"
+                                    Content="Confirm Transaction - Expense"
+                                    FontSize="16"
+                                    Click="btnConfirmTransaction_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=txtExpenseAmount}" Value="False">
+                                                <Setter Property="IsEnabled" Value="True" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <Button Grid.Row="1" Margin="20, 2"
-                        Content="Confirm Transaction"
-                        FontSize="16">
-                </Button>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Margin="10, 5">
@@ -227,7 +299,8 @@
                            Text="Current Balance:"/>
                 <TextBlock Grid.Column="1" VerticalAlignment="Center"
                            FontSize="20"
-                           Text="0"/>
+                           Text="{Binding CurrentBalance.CurrentBalance}">
+                </TextBlock>
                 <TextBlock Grid.Column="2" VerticalAlignment="Center"
                            FontWeight="SemiBold" FontSize="20"
                            Text="SEK"/>

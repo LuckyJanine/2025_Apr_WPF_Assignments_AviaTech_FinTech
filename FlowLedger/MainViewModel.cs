@@ -1,4 +1,5 @@
 ﻿using FlowLedger.Enums;
+using FlowLedger.Models;
 using FlowLedger.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -20,6 +21,12 @@ namespace FlowLedger
             "Food",
             "Rent"
         };
+
+        private Balance _currentBalance;
+        private List<TransactionDetail> _transactions;
+        private ObservableCollection<TransactionDetail> _transactionsView;
+        private Dictionary<string, List<TransactionDetail>> _monthlyTransactions;
+
         public ObservableCollection<string> CategoryNamesView { get; } = new();
 
         private TransactionType _selectedTransactionType = TransactionType.Spend;
@@ -37,6 +44,9 @@ namespace FlowLedger
             CategoryNamesView = new ObservableCollection<string>(_categoryNames);
             SelectedCategoryName = _categoryNames.First();
             _transactionVM = new TransactionViewModel();
+            _currentBalance = new Balance(0, "SEK");
+            _transactions = new List<TransactionDetail>();
+            _monthlyTransactions = new Dictionary<string, List<TransactionDetail>>();
         }
 
         public string NewCategoryToAdd
@@ -84,6 +94,26 @@ namespace FlowLedger
             }
         }
 
+        public Balance CurrentBalance
+        {
+            get => _currentBalance;
+            set
+            {
+                _currentBalance = value;
+                OnPropertyChanged(nameof(CurrentBalance));
+            }
+        }
+
+        public ObservableCollection<TransactionDetail> TransactionsView
+        {
+            get => _transactionsView;
+            set
+            {
+                _transactionsView = value;
+                OnPropertyChanged(nameof(TransactionsView));
+            }
+        }
+
         public (bool, string) AddNewCategory(string newCategory)
         {
             bool ok = _categoryNames.Add(newCategory);
@@ -103,6 +133,29 @@ namespace FlowLedger
                 errorMsg = "Can't add. Already exist.";
             }
             return (ok, errorMsg);
+        }
+
+        public void ConfirmTransaction()
+        {
+            if (_transactionVM != null) 
+            {
+                var category = new TransactionCategory(SelectedCategoryName, SelectedTransactionType);
+                var transaction = new TransactionDetail(_transactionVM.Amount,
+                    _transactionVM.CurrencyCode,
+                    category,
+                    _transactionVM.Description,
+                    _transactionVM.TransactionDate);
+                var amount = transaction.Amount;
+                switch (SelectedTransactionType)
+                {
+                    case TransactionType.Spend:
+                        amount = amount * -1;
+                        break;
+                }
+                CurrentBalance.ConfirmTransaction(amount, transaction.Currency);
+                OnPropertyChanged(nameof(CurrentBalance));
+                _transactions.Add(transaction);
+            }
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

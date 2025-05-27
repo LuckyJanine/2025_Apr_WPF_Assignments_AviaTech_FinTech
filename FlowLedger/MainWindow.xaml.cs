@@ -1,6 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace FlowLedger
 {
@@ -35,6 +37,23 @@ namespace FlowLedger
                 else
                 {
                     MessageBox.Show("Please type a new Category to add.");
+                }
+            }
+        }
+
+        private void btnConfirmTransaction_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is Button))
+            {
+                mv.ConfirmTransaction();
+                switch (mv.SelectedTransactionType)
+                {
+                    case Enums.TransactionType.Revenue:
+                        txtIncomeAmount.Text = string.Empty;
+                        break;
+                    case Enums.TransactionType.Spend:
+                        txtExpenseAmount.Text = string.Empty;
+                        break;
                 }
             }
         }
