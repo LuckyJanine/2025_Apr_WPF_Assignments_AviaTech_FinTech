@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlowLedger"
         mc:Ignorable="d"
-        Title="Flow Ledger" Height="750" Width="800">
+        Title="Flow Ledger" Height="800" Width="800">
 
     <Window.Resources>
 
@@ -321,10 +321,11 @@
                                Text="Monthly Overview:">
                     </TextBlock>
                     <ComboBox Grid.Column="1"
-                              ItemsSource="{Binding Months}">
+                              ItemsSource="{Binding Months}"
+                              SelectedItem="{Binding SelectedMonth}">
                     </ComboBox>
                 </Grid>
-                <Grid Grid.Column="1" Margin="4, 0, 0, 0">
+                <Grid Grid.Column="1" Margin="10, 0, 0, 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1.2*"/>
                         <ColumnDefinition Width="*"/>
@@ -357,7 +358,33 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="2">
-                
+                <ListView Margin="5"
+                          ItemsSource="{Binding Transactions}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Date" 
+                                            DisplayMemberBinding="{Binding CreationDate, StringFormat={}{0:yyyy-MM-dd}}" 
+                                            Width="100"/>
+                            <GridViewColumn Header="Amount" 
+                                            DisplayMemberBinding="{Binding Amount}" 
+                                            Width="120"/>
+                            <GridViewColumn Header="Category" 
+                                            DisplayMemberBinding="{Binding Category.Name}" 
+                                            Width="120"/>
+                            <GridViewColumn Header="Description" 
+                                            DisplayMemberBinding="{Binding Description}" 
+                                            Width="180"/>
+                            <GridViewColumn Header="Transaction ID"
+                                            Width="250">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Id}" FontSize="12" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </Grid>
         </Grid>
     </Grid>

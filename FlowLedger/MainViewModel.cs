@@ -14,6 +14,8 @@ namespace FlowLedger
             "EUR" 
         };
 
+        public IEnumerable<Month> Months { get; } = Enum.GetValues(typeof(Month)).Cast<Month>();
+
         private HashSet<string> _categoryNames = new HashSet<string>
         {
             "Uncategorized",
@@ -23,8 +25,8 @@ namespace FlowLedger
         };
 
         private Balance _currentBalance;
-        private List<TransactionDetail> _transactions;
-        private ObservableCollection<TransactionDetail> _transactionsView;
+        private Month _selectedMonth = Month.NotSelected;
+        private ObservableCollection<TransactionDetail> _transactions;
         private Dictionary<string, List<TransactionDetail>> _monthlyTransactions;
 
         public ObservableCollection<string> CategoryNamesView { get; } = new();
@@ -45,7 +47,7 @@ namespace FlowLedger
             SelectedCategoryName = _categoryNames.First();
             _transactionVM = new TransactionViewModel();
             _currentBalance = new Balance(0, "SEK");
-            _transactions = new List<TransactionDetail>();
+            _transactions = new ObservableCollection<TransactionDetail>();
             _monthlyTransactions = new Dictionary<string, List<TransactionDetail>>();
         }
 
@@ -104,13 +106,23 @@ namespace FlowLedger
             }
         }
 
-        public ObservableCollection<TransactionDetail> TransactionsView
+        public Month SelectedMonth
         {
-            get => _transactionsView;
+            get => _selectedMonth;
             set
             {
-                _transactionsView = value;
-                OnPropertyChanged(nameof(TransactionsView));
+                _selectedMonth = value;
+                OnPropertyChanged(nameof(SelectedMonth));
+            }
+        }
+
+        public ObservableCollection<TransactionDetail> Transactions
+        {
+            get => _transactions;
+            set
+            {
+                _transactions = value;
+                OnPropertyChanged(nameof(Transactions));
             }
         }
 
