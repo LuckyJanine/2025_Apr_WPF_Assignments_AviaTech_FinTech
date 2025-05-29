@@ -12,6 +12,7 @@
         <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
         <local:ValueWithoutSpecialChars x:Key="ValueWithoutSpecialChars" />
         <local:BoolToTextBlockVisibilityConverter x:Key="BoolToTextBlockVisibilityConverter" />
+        <local:TransactionTypeToColorConverter x:Key="TransactionTypeToColorConverter" />
 
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
@@ -375,8 +376,15 @@
                                             DisplayMemberBinding="{Binding CreationDate, StringFormat={}{0:yyyy-MM-dd}}" 
                                             Width="100"/>
                             <GridViewColumn Header="Amount" 
-                                            DisplayMemberBinding="{Binding Amount}" 
-                                            Width="120"/>
+                                            Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Amount}"
+                                                   Style="{Binding Category.TransactionType, Converter={StaticResource TransactionTypeToColorConverter}}">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="Category" 
                                             DisplayMemberBinding="{Binding Category.Name}" 
                                             Width="120"/>

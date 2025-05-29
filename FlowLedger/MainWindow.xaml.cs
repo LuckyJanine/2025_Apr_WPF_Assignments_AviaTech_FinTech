@@ -1,8 +1,11 @@
-﻿using System.Globalization;
+﻿using FlowLedger.Enums;
+using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace FlowLedger
 {
@@ -116,5 +119,28 @@ namespace FlowLedger
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
             (Visibility)value == Visibility.Visible;
+    }
+
+    public class TransactionTypeToColorConverter : IValueConverter 
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is TransactionType type)
+            {
+                if (type == TransactionType.Revenue)
+                {
+                    // return Brushes.Blue;
+                    var style = new Style(typeof(TextBlock));
+                    style.Setters.Add(new Setter(TextBlock.FontSizeProperty, 14.0));
+                    style.Setters.Add(new Setter(TextBlock.ForegroundProperty, Brushes.Blue));
+                    style.Setters.Add(new Setter(TextBlock.FontWeightProperty, FontWeights.SemiBold));
+                    style.Setters.Add(new Setter(TextBlock.FontStyleProperty, FontStyles.Italic));
+                    return style;
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+            throw new NotSupportedException();
     }
 }
