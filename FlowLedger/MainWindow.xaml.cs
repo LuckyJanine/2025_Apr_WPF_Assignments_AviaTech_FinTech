@@ -31,7 +31,7 @@ namespace FlowLedger
                         MessageBox.Show($"Adding Failed.\n{error}");
                     } else
                     {
-                        txtCategoryName.Text = string.Empty;
+                        mv.NewCategoryToAdd = string.Empty;
                     }
                 }
                 else
@@ -46,15 +46,6 @@ namespace FlowLedger
             if ((DataContext is MainViewModel mv) && (sender is Button))
             {
                 mv.ConfirmTransaction();
-                switch (mv.SelectedTransactionType)
-                {
-                    case Enums.TransactionType.Revenue:
-                        txtIncomeAmount.Text = string.Empty;
-                        break;
-                    case Enums.TransactionType.Spend:
-                        txtExpenseAmount.Text = string.Empty;
-                        break;
-                }
             }
         }
 
@@ -116,5 +107,14 @@ namespace FlowLedger
                 return new ValidationResult(false, "No special char.");
             }
         }
+    }
+
+    public class BoolToTextBlockVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            (bool)value ? Visibility.Visible : Visibility.Collapsed;
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+            (Visibility)value == Visibility.Visible;
     }
 }

@@ -26,6 +26,9 @@ namespace FlowLedger
 
         private Balance _currentBalance;
         private Month _selectedMonth = Month.NotSelected;
+
+        private bool _isOverviewVisible = false;
+
         private ObservableCollection<TransactionDetail> _transactions;
         private Dictionary<string, List<TransactionDetail>> _monthlyTransactions;
 
@@ -113,6 +116,17 @@ namespace FlowLedger
             {
                 _selectedMonth = value;
                 OnPropertyChanged(nameof(SelectedMonth));
+                UpdateMonthlyOverview();
+            }
+        }
+
+        public bool IsOverviewVisible
+        {
+            get => _isOverviewVisible;
+            set
+            {
+                _isOverviewVisible = value;
+                OnPropertyChanged(nameof(IsOverviewVisible));
             }
         }
 
@@ -123,6 +137,18 @@ namespace FlowLedger
             {
                 _transactions = value;
                 OnPropertyChanged(nameof(Transactions));
+            }
+        }
+
+        private void UpdateMonthlyOverview()
+        {
+            if (SelectedMonth != Month.NotSelected)
+            {
+                IsOverviewVisible = true;
+            }
+            else
+            {
+                IsOverviewVisible = false;
             }
         }
 
@@ -167,7 +193,13 @@ namespace FlowLedger
                 CurrentBalance.ConfirmTransaction(amount, transaction.Currency);
                 OnPropertyChanged(nameof(CurrentBalance));
                 _transactions.Add(transaction);
+                ResetTransaction();
             }
+        }
+
+        private void ResetTransaction()
+        {
+            TransactionVM = new TransactionViewModel();
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

@@ -11,6 +11,7 @@
 
         <local:ValueIsNotNullOrEmpty x:Key="ValueIsNotNullOrEmpty" />
         <local:ValueWithoutSpecialChars x:Key="ValueWithoutSpecialChars" />
+        <local:BoolToTextBlockVisibilityConverter x:Key="BoolToTextBlockVisibilityConverter" />
 
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
@@ -331,14 +332,15 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="1.2*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="0.8*"/>
-                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="1.5*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" VerticalAlignment="Center"
                                Text="Total Revenue:">
                     </TextBlock>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center"
+                    <TextBlock x:Name="txtTotalRevenue"
+                               Grid.Column="1" VerticalAlignment="Center"
                                FontWeight="SemiBold"
+                               Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}"
                                Text="1000">
                     </TextBlock>
                     <TextBlock Grid.Column="2" VerticalAlignment="Center"
@@ -346,15 +348,22 @@
                     </TextBlock>
                     <TextBlock Grid.Column="3" VerticalAlignment="Center"
                                FontWeight="SemiBold"
+                               Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}"
                                Text="1000">
                     </TextBlock>
-                    <TextBlock Grid.Column="4" VerticalAlignment="Center"
-                               Text="Surplus:">
-                    </TextBlock>
-                    <TextBlock Grid.Column="5" VerticalAlignment="Center"
+                    <Grid Grid.Column="4" Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center"
+                                   Text="Surplus:">
+                        </TextBlock>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center"
                                FontWeight="SemiBold"
                                Text="2000">
-                    </TextBlock>
+                        </TextBlock>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid Grid.Row="2">
@@ -373,9 +382,9 @@
                                             Width="120"/>
                             <GridViewColumn Header="Description" 
                                             DisplayMemberBinding="{Binding Description}" 
-                                            Width="180"/>
+                                            Width="170"/>
                             <GridViewColumn Header="Transaction ID"
-                                            Width="250">
+                                            Width="260">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Id}" FontSize="12" />
