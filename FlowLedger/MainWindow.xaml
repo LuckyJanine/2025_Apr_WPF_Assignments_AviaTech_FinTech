@@ -120,13 +120,12 @@
             <Grid Grid.Column="1">
                 <TabControl x:Name="tbcCategoryType"
                             SelectionChanged="tbcCategoryType_SelectionChanged"
-                            Grid.Row="0" Margin="10, 5">
+                            Grid.Row="0" Margin="5">
                     <TabItem Header="Income" FontSize="14">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="11*"/>
-                                <ColumnDefinition Width="108*"/>
-                                <ColumnDefinition Width="296*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3.5*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -138,10 +137,11 @@
                             <TextBlock Margin="10,0,0,0"
                                        VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Text="Transaction Date:" Grid.ColumnSpan="2"/>
                             <TextBlock VerticalAlignment="Center" FontStyle="Italic" FontWeight="SemiBold"
-                                       Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd    dddd}'}" Grid.ColumnSpan="2" Margin="107,0,0,0" />
+                                       HorizontalAlignment="Center"
+                                       Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd    dddd}'}" />
                             <TextBlock Margin="10,0,0,0" Grid.Row="1"
-                                       VerticalAlignment="Center" FontSize="14" Text="Amount:" Grid.ColumnSpan="2"/>
-                            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="107,0,0,34" Grid.RowSpan="2">
+                                       VerticalAlignment="Center" FontSize="14" Text="Amount:"/>
+                            <Grid Grid.Row="1" Grid.Column="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
@@ -204,9 +204,8 @@
                     <TabItem Header="Expense" FontSize="14">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="11*"/>
-                                <ColumnDefinition Width="108*"/>
-                                <ColumnDefinition Width="296*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3.5*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -221,7 +220,7 @@
                                        Grid.Column="1" Text="{Binding TransactionVM.TransactionDate, StringFormat='{}{0:yyyy-MM-dd    dddd}'}" Grid.ColumnSpan="2" Margin="107,0,0,0" />
                             <TextBlock Margin="10,0,0,0" Grid.Row="1"
                                        VerticalAlignment="Center" FontSize="14" Text="Amount:" Grid.ColumnSpan="2"/>
-                            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="107,0,0,34" Grid.RowSpan="2">
+                            <Grid Grid.Row="1" Grid.Column="1" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
