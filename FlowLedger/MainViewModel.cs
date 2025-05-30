@@ -3,6 +3,7 @@ using FlowLedger.Models;
 using FlowLedger.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 
 namespace FlowLedger
 {
@@ -122,6 +123,7 @@ namespace FlowLedger
                 _selectedMonth = value;
                 OnPropertyChanged(nameof(SelectedMonth));
                 UpdateMonthlyOverview();
+                PopulateMonthlyTransactions();
             }
         }
 
@@ -211,6 +213,27 @@ namespace FlowLedger
             }
         }
 
+        private void PopulateMonthlyTransactions()
+        {
+            if (SelectedMonth != Month.NotSelected)
+            {
+                var month = SelectedMonth.ToString();
+                if (_monthlyTransactions.TryGetValue(month, out var monthTransactions))
+                {
+                    Transactions = new ObservableCollection<TransactionDetail>(monthTransactions.Transactions);
+                }
+                else
+                {
+                    Transactions = new ObservableCollection<TransactionDetail>();
+                }
+            }
+            else
+            {
+                Transactions = 
+                    new ObservableCollection<TransactionDetail>(_monthlyTransactions.Values.SelectMany(t => t.Transactions));
+            }
+        }
+
         public (bool, string) AddNewCategory(string newCategory)
         {
             bool ok = _categoryNames.Add(newCategory);
@@ -251,9 +274,9 @@ namespace FlowLedger
                 }
                 CurrentBalance.ConfirmTransaction(amount, transaction.Currency);
                 OnPropertyChanged(nameof(CurrentBalance));
-                _transactions.Add(transaction);
-                SyncListTransactionsAndDicTransactions(transaction);
+                AddTransactionToDictionaryCollection(transaction);
                 UpdateMonthlyOverview();
+                PopulateMonthlyTransactions();
                 ResetTransaction();
             }
         }
@@ -263,9 +286,10 @@ namespace FlowLedger
             TransactionVM = new TransactionViewModel();
         }
 
-        // not sure why use two collections for Transactions
-        // but required by 5.3
-        private void SyncListTransactionsAndDicTransactions(TransactionDetail transaction)
+        // Don't feel comfortable with keeping two collections as requested 3.2 in assignment doc
+        // use Dictionary as single point of truth.
+        // omit List<Transaction> on purpose.
+        private void AddTransactionToDictionaryCollection(TransactionDetail transaction)
         {
             if (transaction.CreationDate != null)
             {

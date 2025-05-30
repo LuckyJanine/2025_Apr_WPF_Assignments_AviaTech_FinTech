@@ -13,6 +13,7 @@
         public decimal TotalExpense => _totalExpense;
         public decimal MonthlyNet => _monthlyNet;
         public bool IsDeficit => _isDeficit;
+        public List<TransactionDetail> Transactions => _transactions;
 
         public void Add(TransactionDetail transaction)
         {
