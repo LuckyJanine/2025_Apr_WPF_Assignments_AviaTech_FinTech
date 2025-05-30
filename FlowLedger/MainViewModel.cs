@@ -30,7 +30,7 @@ namespace FlowLedger
         private bool _isOverviewVisible = false;
 
         private ObservableCollection<TransactionDetail> _transactions;
-        private Dictionary<string, List<TransactionDetail>> _monthlyTransactions;
+        private Dictionary<string, MonthTransactions> _monthlyTransactions;
 
         public ObservableCollection<string> CategoryNamesView { get; } = new();
 
@@ -51,7 +51,7 @@ namespace FlowLedger
             _transactionVM = new TransactionViewModel();
             _currentBalance = new Balance(0, "SEK");
             _transactions = new ObservableCollection<TransactionDetail>();
-            _monthlyTransactions = new Dictionary<string, List<TransactionDetail>>();
+            _monthlyTransactions = new Dictionary<string, MonthTransactions>();
         }
 
         public string NewCategoryToAdd
@@ -193,6 +193,7 @@ namespace FlowLedger
                 CurrentBalance.ConfirmTransaction(amount, transaction.Currency);
                 OnPropertyChanged(nameof(CurrentBalance));
                 _transactions.Add(transaction);
+                SyncListTransactionsAndDicTransactions(transaction);
                 ResetTransaction();
             }
         }
@@ -200,6 +201,29 @@ namespace FlowLedger
         private void ResetTransaction()
         {
             TransactionVM = new TransactionViewModel();
+        }
+
+        // not sure why use two collections for Transactions
+        // but required by 5.3
+        private void SyncListTransactionsAndDicTransactions(TransactionDetail transaction)
+        {
+            if (transaction.CreationDate != null)
+            {
+                string month = transaction.CreationDate.Value.ToString("MMMM");
+                if (!_monthlyTransactions.ContainsKey(month))
+                {
+                    var monthTransactions = new MonthTransactions();
+                    monthTransactions.Add(transaction);
+                    _monthlyTransactions.Add(month, monthTransactions);
+                } else if (_monthlyTransactions[month] != null)
+                {
+                    _monthlyTransactions[month].Add(transaction);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
