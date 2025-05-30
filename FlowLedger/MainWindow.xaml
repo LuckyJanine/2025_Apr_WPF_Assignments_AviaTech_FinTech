@@ -373,7 +373,7 @@
                         <GridView>
                             <GridViewColumn Header="Date" 
                                             DisplayMemberBinding="{Binding CreationDate, StringFormat={}{0:yyyy-MM-dd}}" 
-                                            Width="100"/>
+                                            Width="90"/>
                             <GridViewColumn Header="Amount" 
                                             Width="120">
                                 <GridViewColumn.CellTemplate>
@@ -391,7 +391,7 @@
                                             DisplayMemberBinding="{Binding Description}" 
                                             Width="170"/>
                             <GridViewColumn Header="Transaction ID"
-                                            Width="260">
+                                            Width="270">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Id}" FontSize="12" />
