@@ -321,9 +321,11 @@
                                VerticalAlignment="Center"
                                Text="Monthly Overview:">
                     </TextBlock>
-                    <ComboBox Grid.Column="1"
+                    <ComboBox x:Name="cmbSelectedMonth"
+                              Grid.Column="1"
                               ItemsSource="{Binding Months}"
                               SelectedItem="{Binding SelectedMonth}">
+                        <!--SelectionChanged="cmbSelectedMonth_SelectionChanged"-->
                     </ComboBox>
                 </Grid>
                 <Grid Grid.Column="1" Margin="10, 0, 0, 0">
@@ -341,7 +343,7 @@
                                Grid.Column="1" VerticalAlignment="Center"
                                FontWeight="SemiBold"
                                Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}"
-                               Text="1000">
+                               Text="{Binding MonthlyRevenue}">
                     </TextBlock>
                     <TextBlock Grid.Column="2" VerticalAlignment="Center"
                                Text="Total Expense:">
@@ -349,19 +351,29 @@
                     <TextBlock Grid.Column="3" VerticalAlignment="Center"
                                FontWeight="SemiBold"
                                Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}"
-                               Text="1000">
+                               Text="{Binding MonthlyExpense}">
                     </TextBlock>
                     <Grid Grid.Column="4" Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="1.2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" VerticalAlignment="Center"
-                                   Text="Surplus:">
+                        <TextBlock x:Name="txtIsDeficit"
+                                   Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="Surplus:"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDeficit}" Value="True">
+                                            <Setter Property="Text" Value="Deficit:"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
                         </TextBlock>
                         <TextBlock Grid.Column="1" VerticalAlignment="Center"
                                FontWeight="SemiBold"
-                               Text="2000">
+                               Text="{Binding MonthlyTotalNet}">
                         </TextBlock>
                     </Grid>
                 </Grid>

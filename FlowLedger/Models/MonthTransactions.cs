@@ -7,10 +7,12 @@
         private decimal _totalRevenue;
         private decimal _totalExpense;
         private decimal _monthlyNet;
+        private bool _isDeficit;
 
         public decimal TotalRevenue => _totalRevenue;
         public decimal TotalExpense => _totalExpense;
         public decimal MonthlyNet => _monthlyNet;
+        public bool IsDeficit => _isDeficit;
 
         public void Add(TransactionDetail transaction)
         {
@@ -34,6 +36,10 @@
                 throw new InvalidOperationException();
             }
             _monthlyNet = _totalRevenue - _totalExpense;
+            if (_monthlyNet < 0)
+            {
+                _isDeficit = true;
+            }
         }
     }
 }

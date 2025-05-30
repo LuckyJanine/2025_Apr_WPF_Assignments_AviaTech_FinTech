@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -71,6 +72,25 @@ namespace FlowLedger
                 }
             }
         }
+
+        // probably better to use StyleTrigger in view rather than Message Queue (?)
+        //private void cmbSelectedMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if ((DataContext is MainViewModel mv) && (sender is ComboBox))
+        //    {
+        //        Dispatcher.BeginInvoke(new Action(() =>
+        //        {
+        //            var selectedMonth = mv.SelectedMonth;
+        //            if (mv.IsDeficit)
+        //            {
+        //                txtIsDeficit.Text = "Deficit:";
+        //            } else
+        //            {
+        //                txtIsDeficit.Text = "Surplus:";
+        //            }
+        //        }), System.Windows.Threading.DispatcherPriority.Background);
+        //    }
+        //}
     }
     
     public class ValueIsNotNullOrEmpty : ValidationRule

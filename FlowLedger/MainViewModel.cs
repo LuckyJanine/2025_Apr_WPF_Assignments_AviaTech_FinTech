@@ -29,6 +29,11 @@ namespace FlowLedger
 
         private bool _isOverviewVisible = false;
 
+        private decimal _monthlyRevenue;
+        private decimal _monthlyExpense;
+        private decimal _monthlyTotalNet;
+        private bool _isDeficit;
+
         private ObservableCollection<TransactionDetail> _transactions;
         private Dictionary<string, MonthTransactions> _monthlyTransactions;
 
@@ -130,6 +135,46 @@ namespace FlowLedger
             }
         }
 
+        public decimal MonthlyRevenue
+        {
+            get => _monthlyRevenue;
+            set
+            {
+                _monthlyRevenue = value;
+                OnPropertyChanged(nameof(MonthlyRevenue));
+            }
+        }
+
+        public decimal MonthlyExpense
+        {
+            get => _monthlyExpense;
+            set
+            {
+                _monthlyExpense = value;
+                OnPropertyChanged(nameof(MonthlyExpense));
+            }
+        }
+
+        public decimal MonthlyTotalNet
+        {
+            get => _monthlyTotalNet;
+            set
+            {
+                _monthlyTotalNet = value;
+                OnPropertyChanged(nameof(MonthlyTotalNet));
+            }
+        }
+
+        public bool IsDeficit
+        {
+            get => _isDeficit;
+            set 
+            {
+                _isDeficit = value;
+                OnPropertyChanged(nameof(IsDeficit));
+            }
+        }
+
         public ObservableCollection<TransactionDetail> Transactions
         {
             get => _transactions;
@@ -145,6 +190,20 @@ namespace FlowLedger
             if (SelectedMonth != Month.NotSelected)
             {
                 IsOverviewVisible = true;
+                var month = SelectedMonth.ToString();
+                if (_monthlyTransactions.ContainsKey(month))
+                {
+                    MonthlyRevenue = _monthlyTransactions[month].TotalRevenue;
+                    MonthlyExpense = _monthlyTransactions[month].TotalExpense;
+                    MonthlyTotalNet = _monthlyTransactions[month].MonthlyNet;
+                    IsDeficit = _monthlyTransactions[month].IsDeficit;
+                } else
+                {
+                    MonthlyRevenue = decimal.Zero;
+                    MonthlyExpense = decimal.Zero;
+                    MonthlyTotalNet = decimal.Zero;
+                    IsDeficit = false;
+                }
             }
             else
             {
@@ -194,6 +253,7 @@ namespace FlowLedger
                 OnPropertyChanged(nameof(CurrentBalance));
                 _transactions.Add(transaction);
                 SyncListTransactionsAndDicTransactions(transaction);
+                UpdateMonthlyOverview();
                 ResetTransaction();
             }
         }
