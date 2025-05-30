@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace FlowLedger.ViewModels
 {
@@ -109,9 +110,11 @@ namespace FlowLedger.ViewModels
 
         private decimal? ConvertTransactionAmount(string transactionAmount)
         {
-            transactionAmount = transactionAmount.Trim();
+            //transactionAmount = transactionAmount.Trim();
             transactionAmount = transactionAmount.Replace(',', '.');
-            if (decimal.TryParse(transactionAmount, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount))
+            bool customValidation = Regex.IsMatch(transactionAmount, @"^\s*-?\d+(\.\d*)?\s*$");
+            if (customValidation &&
+                decimal.TryParse(transactionAmount, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount))
             {
                 _isAmountConvertable = true;
                 return amount;
@@ -141,7 +144,7 @@ namespace FlowLedger.ViewModels
                     case nameof(TxtExpenseAmount):
                         if (!_isAmountConvertable)
                         {
-                            return "value not convertable.";
+                            return "Not convertable.\n(No thousands separators!)";
                         }
                         if (!_isAmountValid)
                         {
