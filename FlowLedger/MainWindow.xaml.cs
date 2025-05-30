@@ -1,6 +1,8 @@
 ﻿using FlowLedger.Enums;
 using System;
+using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -162,5 +164,34 @@ namespace FlowLedger
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
             throw new NotSupportedException();
+    }
+
+    public class MonthEnumDescriptionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
+            var field = value.GetType().GetField(value.ToString());
+            var attribute = (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
+
+            return attribute == null ? value.ToString() : attribute.Description;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            foreach (var field in targetType.GetFields())
+            {
+                var attribute = (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
+                if (attribute != null && attribute.Description == value.ToString())
+                {
+                    return field.GetValue(null);
+                }
+            }
+            return null;
+        }
     }
 }
