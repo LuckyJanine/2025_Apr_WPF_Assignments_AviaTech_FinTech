@@ -9,7 +9,7 @@ namespace FlowLedger.Enums
 {
     internal enum Month
     {
-        [Description("<-- All Transactions -->")]
+        [Description("<- All Transactions ->")]
         NotSelected = 0,
         January,
         February,

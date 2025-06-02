@@ -153,6 +153,14 @@ namespace FlowLedger
             }
         }
 
+        private void btnMonthReport_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is Button))
+            {
+
+            }
+        }
+
         // probably better to use StyleTrigger in view rather than Message Queue (?)
         //private void cmbSelectedMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         //{
