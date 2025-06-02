@@ -110,7 +110,15 @@ namespace FlowLedger
                     mv.SelectedMonth = Month.NotSelected;
                     if (mv.Transactions.Count != 0)
                     {
-
+                        var (success, errmsg) = mv.Save();
+                        if (success && string.IsNullOrEmpty(errmsg))
+                        {
+                            MessageBox.Show($"Transactions saved at:\n{mv.FilePath}");
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Error: {errmsg}");
+                        }
                     } else
                     {
                         MessageBox.Show("No transaction to save.");
