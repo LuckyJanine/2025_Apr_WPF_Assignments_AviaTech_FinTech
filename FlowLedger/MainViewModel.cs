@@ -1,9 +1,13 @@
 ﻿using FlowLedger.Enums;
 using FlowLedger.Models;
+using FlowLedger.Utils;
 using FlowLedger.ViewModels;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
+using System.IO;
+using System.IO.Packaging;
 
 namespace FlowLedger
 {
@@ -24,6 +28,8 @@ namespace FlowLedger
             "Food",
             "Rent"
         };
+
+        private string _filePath;
 
         private Balance _currentBalance;
         private Month _selectedMonth = Month.NotSelected;
@@ -58,6 +64,16 @@ namespace FlowLedger
             _currentBalance = new Balance(0, "SEK");
             _transactions = new ObservableCollection<TransactionDetail>();
             _monthlyTransactions = new Dictionary<string, MonthTransactions>();
+        }
+
+        public string FilePath
+        {
+            get => _filePath;
+            set
+            {
+                _filePath = value;
+                OnPropertyChanged(nameof(FilePath));
+            }
         }
 
         public string NewCategoryToAdd
@@ -231,6 +247,29 @@ namespace FlowLedger
             {
                 Transactions = 
                     new ObservableCollection<TransactionDetail>(_monthlyTransactions.Values.SelectMany(t => t.Transactions));
+            }
+        }
+
+        public (bool, string) Save()
+        {
+            return FileHelper.RunWithFile(FilePath, SaveTransactions);
+        }
+
+        public bool SaveTransactions(string file)
+        {
+            try
+            {
+                string jsontransactions = JsonConvert.SerializeObject(_monthlyTransactions, Formatting.Indented, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                File.WriteAllText(file, jsontransactions);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
 

@@ -1,12 +1,11 @@
 ﻿using FlowLedger.Enums;
-using System;
+using FlowLedger.Utils;
+using Microsoft.Win32;
 using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -71,6 +70,57 @@ namespace FlowLedger
                             mv.SelectedTransactionType = Enums.TransactionType.Spend;
                             break;
                     }
+                }
+            }
+        }
+
+        private void mnuSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is MenuItem))
+            {
+                mv.SelectedMonth = Month.NotSelected;
+                if (mv.Transactions.Count == 0)
+                {
+                    MessageBox.Show("No transaction to save.");
+                    return;
+                }
+                var (ok, file, err) = FileHelper.SelectFileForSaving("Json");
+                if (ok && string.IsNullOrEmpty(err)) 
+                {
+                    mv.FilePath = file;
+                    var (success, errmsg) = mv.Save();
+                    if (success && string.IsNullOrEmpty(errmsg))
+                    {
+                        MessageBox.Show($"Transactions saved at:\n{mv.FilePath}");
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Error: {errmsg}");
+                    }
+                }
+            }
+        }
+
+        private void mnuSave_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is MenuItem))
+            {
+                if (!string.IsNullOrEmpty(mv.FilePath))
+                {
+                    mv.SelectedMonth = Month.NotSelected;
+                    if (mv.Transactions.Count != 0)
+                    {
+
+                    } else
+                    {
+                        MessageBox.Show("No transaction to save.");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("File path not specified.");
+                    return;
                 }
             }
         }
