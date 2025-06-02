@@ -2,12 +2,10 @@
 using FlowLedger.Models;
 using FlowLedger.Utils;
 using FlowLedger.ViewModels;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.IO.Packaging;
 
 namespace FlowLedger
 {
@@ -272,7 +270,8 @@ namespace FlowLedger
         {
             try
             {
-                string jsontransactions = JsonConvert.SerializeObject(_monthlyTransactions, Formatting.Indented, new JsonSerializerSettings
+                var accountStatusToSave = new AccountInfo(CurrentBalance.CurrentBalance, _monthlyTransactions);
+                string jsontransactions = JsonConvert.SerializeObject(accountStatusToSave, Formatting.Indented, new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Auto,
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -295,11 +294,13 @@ namespace FlowLedger
                 {
                     Transactions.Clear();
                     _monthlyTransactions.Clear();
-                    var deserialized = JsonConvert.DeserializeObject<Dictionary<string, MonthTransactions>>(json, new JsonSerializerSettings
+                    var deserialized = JsonConvert.DeserializeObject<AccountInfo>(json, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.Auto,
                     });
-                    _monthlyTransactions = deserialized;
+                    _monthlyTransactions = deserialized.MonthlyTransactions;
+                    _currentBalance = new Balance(deserialized.CurrentBalance, "SEK");
+                    OnPropertyChanged(nameof(CurrentBalance));
                     PopulateMonthlyTransactions();
                     return (true, string.Empty);
                 } else
