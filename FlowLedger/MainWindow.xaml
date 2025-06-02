@@ -31,8 +31,8 @@
         <Grid Grid.Row="0">
             <Menu HorizontalAlignment="Left">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Open">
-                    </MenuItem>
+                    <MenuItem Header="_Open"
+                              Click="mnuOpen_Click"/>
                     <MenuItem Header="_Save"
                               x:Name="mnuSave"
                               Click="mnuSave_Click"

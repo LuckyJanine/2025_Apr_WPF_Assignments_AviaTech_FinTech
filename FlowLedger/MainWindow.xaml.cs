@@ -133,6 +133,26 @@ namespace FlowLedger
             }
         }
 
+        private void mnuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext is MainViewModel mv) && (sender is MenuItem))
+            {
+                var (ok, file, err) = FileHelper.SelectFileToOpen("Json");
+                if (ok && string.IsNullOrEmpty(err))
+                {
+                    mv.FilePath = file;
+                    var (success, errmsg) = mv.OpenTransactions();
+                    if (!success)
+                    {
+                        MessageBox.Show($"Error: {errmsg}");
+                    }
+                }else
+                {
+                    MessageBox.Show($"Can't open, Due to\n{err}");
+                }
+            }
+        }
+
         // probably better to use StyleTrigger in view rather than Message Queue (?)
         //private void cmbSelectedMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         //{

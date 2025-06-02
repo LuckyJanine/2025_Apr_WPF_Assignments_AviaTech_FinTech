@@ -255,7 +255,7 @@ namespace FlowLedger
             return FileHelper.RunWithFile(FilePath, SaveTransactions);
         }
 
-        public bool SaveTransactions(string file)
+        private bool SaveTransactions(string file)
         {
             try
             {
@@ -270,6 +270,33 @@ namespace FlowLedger
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+        public (bool, string) OpenTransactions()
+        {
+            try
+            {
+                var (json, error) = FileHelper.RunWithFile(FilePath, File.ReadAllText);
+                if (json != null && string.IsNullOrEmpty(error))
+                {
+                    Transactions.Clear();
+                    _monthlyTransactions.Clear();
+                    var deserialized = JsonConvert.DeserializeObject<Dictionary<string, MonthTransactions>>(json, new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    });
+                    _monthlyTransactions = deserialized;
+                    PopulateMonthlyTransactions();
+                    return (true, string.Empty);
+                } else
+                {
+                    return (false, error);
+                }
+            }
+            catch (Exception ex) 
+            {
+                return (false, ex.Message);
             }
         }
 

@@ -47,6 +47,43 @@ namespace FlowLedger.Utils
             return (true, fileName, err);
         }
 
+        internal static (bool, string, string) SelectFileToOpen(string fileType)
+        {
+            fileType = fileType.ToLower();
+            var fileName = string.Empty;
+            var openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                Filter = $"Files|*.{fileType}",
+                Title = "Select a file to continue ..."
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                fileName = openFileDialog.FileName;
+            }
+
+            string err = string.Empty;
+
+            var invalidChars = Path.GetInvalidPathChars();
+            if (string.IsNullOrWhiteSpace(fileName) || fileName.Any(c => invalidChars.Contains(c)))
+            {
+                err = "File path isn't valid.";
+                return (false, fileName, err);
+            }
+            else if (!File.Exists(fileName))
+            {
+                err = $"File doesn't exist at:\n{fileName}";
+                return (false, fileName, err);
+            }
+            else if (fileName.Length > 260)
+            {
+                err = "File path is too long.";
+                return (false, fileName, err);
+            }
+            return (true, fileName, err);
+        }
+
         internal static (TResult, string) RunWithFile<TResult>(string fileName, Func<string, TResult> fileAction)
         {
             string error = string.Empty;

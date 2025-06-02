@@ -2,22 +2,15 @@
 {
     internal class MonthTransactions
     {
-        private List<TransactionDetail> _transactions = new List<TransactionDetail>();
-
-        private decimal _totalRevenue;
-        private decimal _totalExpense;
-        private decimal _monthlyNet;
-        private bool _isDeficit;
-
-        public decimal TotalRevenue => _totalRevenue;
-        public decimal TotalExpense => _totalExpense;
-        public decimal MonthlyNet => _monthlyNet;
-        public bool IsDeficit => _isDeficit;
-        public List<TransactionDetail> Transactions => _transactions;
+        public decimal TotalRevenue;
+        public decimal TotalExpense;
+        public decimal MonthlyNet;
+        public bool IsDeficit;
+        public List<TransactionDetail> Transactions;
 
         public void Add(TransactionDetail transaction)
         {
-            _transactions.Add(transaction);
+            Transactions.Add(transaction);
             UpdateOverview(transaction);
         }
 
@@ -28,18 +21,18 @@
             //    .Sum(t => t.Amount);
             if (transaction.Category.TransactionType == Enums.TransactionType.Revenue)
             {
-                _totalRevenue += transaction.Amount;
+                TotalRevenue += transaction.Amount;
             } else if (transaction.Category.TransactionType == Enums.TransactionType.Spend)
             {
-                _totalExpense += transaction.Amount;
+                TotalExpense += transaction.Amount;
             } else
             {
                 throw new InvalidOperationException();
             }
-            _monthlyNet = _totalRevenue - _totalExpense;
-            if (_monthlyNet < 0)
+            MonthlyNet = TotalRevenue - TotalExpense;
+            if (MonthlyNet < 0)
             {
-                _isDeficit = true;
+                IsDeficit = true;
             }
         }
     }
