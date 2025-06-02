@@ -6,7 +6,7 @@
         public decimal TotalExpense;
         public decimal MonthlyNet;
         public bool IsDeficit;
-        public List<TransactionDetail> Transactions;
+        public List<TransactionDetail> Transactions = new List<TransactionDetail>();
 
         public void Add(TransactionDetail transaction)
         {

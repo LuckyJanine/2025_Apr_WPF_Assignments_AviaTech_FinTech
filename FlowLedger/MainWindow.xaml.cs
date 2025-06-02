@@ -1,4 +1,5 @@
 ﻿using FlowLedger.Enums;
+using FlowLedger.Models;
 using FlowLedger.Utils;
 using Microsoft.Win32;
 using System.ComponentModel;
@@ -157,7 +158,21 @@ namespace FlowLedger
         {
             if ((DataContext is MainViewModel mv) && (sender is Button))
             {
-
+                if (mv.SelectedMonth != Month.NotSelected)
+                {
+                    var monthReport = mv.MonthTransactions;
+                    if (monthReport.Key != default)
+                    {
+                        var monthReportWindow = new MonthReportWindow(monthReport);
+                        monthReportWindow.ShowDialog();
+                    }else
+                    {
+                        MessageBox.Show("No transaction.");
+                    }
+                } else
+                {
+                    MessageBox.Show("Select a month to generate the report.");
+                }
             }
         }
 

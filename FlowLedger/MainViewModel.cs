@@ -193,6 +193,19 @@ namespace FlowLedger
             }
         }
 
+        public KeyValuePair<string, MonthTransactions> MonthTransactions
+        {
+            get
+            {
+                var selectedMonth = SelectedMonth.ToString();
+                if (_monthlyTransactions.ContainsKey(selectedMonth))
+                {
+                    return _monthlyTransactions.Where(kv => kv.Key == SelectedMonth.ToString()).First();
+                }
+                return default;
+            }
+        }
+
         public ObservableCollection<TransactionDetail> Transactions
         {
             get => _transactions;
