@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PDFsharp" Version="6.2.0" />
+    <PackageReference Include="PDFsharp-GDI" Version="6.2.0" />
   </ItemGroup>
 
   <ItemGroup>

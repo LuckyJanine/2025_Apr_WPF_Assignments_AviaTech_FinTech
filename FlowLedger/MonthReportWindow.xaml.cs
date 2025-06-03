@@ -1,5 +1,9 @@
 ﻿using FlowLedger.Enums;
 using FlowLedger.Models;
+using FlowLedger.Utils;
+using PdfSharp.Drawing;
+using PdfSharp.Fonts;
+using PdfSharp.Pdf;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -21,7 +25,26 @@ namespace FlowLedger
 
         private void SaveAsPdf_Click(object sender, RoutedEventArgs e)
         {
+            var (ok, file, error) = FileHelper.SelectFileForSaving("pdf");
+            if (ok && string.IsNullOrEmpty(error)) 
+            {
+                PdfDocument doc = new PdfDocument();
+                doc.Info.Title = "Monthly Summary Report";
+                PdfPage page = doc.AddPage();
+                // canvas
+                XGraphics xgf = XGraphics.FromPdfPage(page);
+                XFont titleFont = new XFont("Arial", 14, XFontStyleEx.Bold);
+                XFont paragraphFont = new XFont("Arial", 12, XFontStyleEx.Regular);
 
+                xgf.DrawString(
+                    $"Month Summary Report - {_monthSummary.Key}", 
+                    titleFont, 
+                    XBrushes.Black, 
+                    new XRect(40, 40, page.Width, 40), 
+                    XStringFormats.TopLeft
+                    );
+                doc.Save(file);
+            }
         }
 
         private void LoadMonthReport()
