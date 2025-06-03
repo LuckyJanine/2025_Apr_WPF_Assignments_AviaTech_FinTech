@@ -7,6 +7,20 @@
         mc:Ignorable="d"
         Title="MonthReportWindow" Height="450" Width="450">
     <Grid>
-        <FlowDocumentScrollViewer Name="ReportViewer" Margin="10"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Menu>
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Save As PDF"
+                              Click="SaveAsPdf_Click"/>
+                </MenuItem>
+            </Menu>
+        </Grid>
+        <Grid Grid.Row="1">
+            <FlowDocumentScrollViewer Name="ReportViewer" Margin="10"/>
+        </Grid>
     </Grid>
 </Window>

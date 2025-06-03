@@ -19,6 +19,11 @@ namespace FlowLedger
             LoadMonthReport();
         }
 
+        private void SaveAsPdf_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void LoadMonthReport()
         {
             var doc = new FlowDocument
@@ -52,7 +57,7 @@ namespace FlowLedger
                 string itemText = $"{category}";
                 topExpenseCategoryList.ListItems.Add(new ListItem(new Paragraph(new Run(itemText))));
             }
-            doc.Blocks.Add(new Paragraph(new Run($"Top 3 expense categories: "))
+            doc.Blocks.Add(new Paragraph(new Run($"\nTop 3 expense categories: "))
             {
                 FontWeight = FontWeights.Normal,
                 FontSize = 14,
@@ -73,7 +78,7 @@ namespace FlowLedger
                 string itemText = $"{category}";
                 topRevenueCategoryList.ListItems.Add(new ListItem(new Paragraph(new Run(itemText))));
             }
-            doc.Blocks.Add(new Paragraph(new Run($"Top 3 revenue categories: "))
+            doc.Blocks.Add(new Paragraph(new Run($"\nTop 3 revenue categories: "))
             {
                 FontWeight = FontWeights.SemiBold,
                 Foreground = Brushes.DarkBlue,

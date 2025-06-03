@@ -270,7 +270,7 @@ namespace FlowLedger
         {
             try
             {
-                var accountStatusToSave = new AccountInfo(CurrentBalance.CurrentBalance, _monthlyTransactions);
+                var accountStatusToSave = new AccountStatus(CurrentBalance.CurrentBalance, _monthlyTransactions);
                 string jsontransactions = JsonConvert.SerializeObject(accountStatusToSave, Formatting.Indented, new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Auto,
@@ -294,7 +294,7 @@ namespace FlowLedger
                 {
                     Transactions.Clear();
                     _monthlyTransactions.Clear();
-                    var deserialized = JsonConvert.DeserializeObject<AccountInfo>(json, new JsonSerializerSettings
+                    var deserialized = JsonConvert.DeserializeObject<AccountStatus>(json, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.Auto,
                     });
