@@ -43,6 +43,9 @@ namespace FlowLedger
                     new XRect(40, 40, page.Width, 40), 
                     XStringFormats.TopLeft
                     );
+                xgf.DrawLine(
+                    XPens.Black, 40, 80, (page.Width - 40), 80
+                    );
                 doc.Save(file);
             }
         }
