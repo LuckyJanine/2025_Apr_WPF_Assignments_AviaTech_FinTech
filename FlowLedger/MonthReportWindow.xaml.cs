@@ -2,8 +2,8 @@
 using FlowLedger.Models;
 using FlowLedger.Utils;
 using PdfSharp.Drawing;
-using PdfSharp.Fonts;
 using PdfSharp.Pdf;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -13,14 +13,35 @@ namespace FlowLedger
     /// <summary>
     /// Interaction logic for MonthReportWindow.xaml
     /// </summary>
-    public partial class MonthReportWindow : Window
+    public partial class MonthReportWindow : Window, INotifyPropertyChanged
     {
+        private bool _canExportPDF;
+
         private readonly KeyValuePair<string, MonthTransactions> _monthSummary;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         internal MonthReportWindow(KeyValuePair<string, MonthTransactions> monthSummary)
         {
+            DataContext = this;
             InitializeComponent();
             _monthSummary = monthSummary;
             LoadMonthReport();
+            // has data to do file-export
+            CanExportPDF = _monthSummary.Value != null && _monthSummary.Value.Transactions.Any();
+        }
+
+        public bool CanExportPDF
+        {
+            get => _canExportPDF;
+            set
+            {
+                if (_canExportPDF != value) 
+                {
+                    _canExportPDF = value;
+                    OnPropertyChanged(nameof(CanExportPDF));
+                }
+            }
         }
 
         private void SaveAsPdf_Click(object sender, RoutedEventArgs e)
@@ -35,6 +56,8 @@ namespace FlowLedger
                 XGraphics xgf = XGraphics.FromPdfPage(page);
                 XFont titleFont = new XFont("Arial", 14, XFontStyleEx.Bold);
                 XFont paragraphFont = new XFont("Arial", 12, XFontStyleEx.Regular);
+                XPen mainDividerPen = new XPen(XColors.Black, 2);
+                mainDividerPen.DashStyle = XDashStyle.Solid;
 
                 xgf.DrawString(
                     $"Month Summary Report - {_monthSummary.Key}", 
@@ -44,7 +67,7 @@ namespace FlowLedger
                     XStringFormats.TopLeft
                     );
                 xgf.DrawLine(
-                    XPens.Black, 40, 80, (page.Width - 40), 80
+                    mainDividerPen, 40, 80, (page.Width - 40), 80
                     );
                 doc.Save(file);
             }
@@ -141,5 +164,8 @@ namespace FlowLedger
                 .ToList();
             return topRevenueCategories;
         }
+
+        protected void OnPropertyChanged(string propertyName) 
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

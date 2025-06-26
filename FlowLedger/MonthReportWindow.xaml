@@ -15,7 +15,9 @@
             <Menu>
                 <MenuItem Header="_File">
                     <MenuItem Header="_Save As PDF"
-                              Click="SaveAsPdf_Click"/>
+                              IsEnabled="{Binding CanExportPDF}"
+                              Click="SaveAsPdf_Click"
+                              />
                 </MenuItem>
             </Menu>
         </Grid>
