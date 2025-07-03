@@ -311,7 +311,7 @@ namespace FlowLedger
                     return "<- No Filter by Year ->";
                 }
             }
-            return Binding.DoNothing;
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

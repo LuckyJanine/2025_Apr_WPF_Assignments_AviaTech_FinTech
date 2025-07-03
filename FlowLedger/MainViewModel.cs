@@ -150,6 +150,7 @@ namespace FlowLedger
             {
                 _selectedYear = value;
                 OnPropertyChanged(nameof(SelectedYear));
+                PopulateMonthlyTransactions();
             }
         }
 
@@ -216,9 +217,17 @@ namespace FlowLedger
             }
         }
 
-        private void UpdateYearsWithTransactions()
+        private void UpdateYearsWithTransactions(int year)
         {
-
+            if (!Years.Contains(year))
+            {
+                int index = 0;
+                while (index < Years.Count && Years[index] < year)
+                {
+                    index++;
+                }
+                Years.Insert(index, year);
+            }
         }
 
         public ObservableCollection<TransactionDetail> Transactions
@@ -283,6 +292,14 @@ namespace FlowLedger
                     .Select(p => p.Value)
                     .SelectMany(t => t.Transactions);
                 Transactions = new ObservableCollection<TransactionDetail>(monthlyTransactionsNoYearFilter);
+            }
+            else if (SelectedMonth == Month.NotSelected && SelectedYear != 0) // a specific year with all transactions
+            {
+                var yearlyTransactions = _monthlyTransactions
+                    .Where(kvp => kvp.Key.Year == year)
+                    .Select(p => p.Value)
+                    .SelectMany(t => t.Transactions);
+                Transactions = new ObservableCollection<TransactionDetail>(yearlyTransactions);
             }
             else
             {
@@ -411,6 +428,7 @@ namespace FlowLedger
                     var monthTransactions = new MonthTransactions();
                     monthTransactions.Add(transaction);
                     _monthlyTransactions.Add(yearmonth, monthTransactions);
+                    UpdateYearsWithTransactions(year);
                 }
                 else if (_monthlyTransactions[yearmonth] != null)
                 {
