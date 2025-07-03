@@ -18,6 +18,7 @@ namespace FlowLedger
         };
 
         public IEnumerable<Month> Months { get; } = Enum.GetValues(typeof(Month)).Cast<Month>();
+        public ObservableCollection<int> Years { get; } = new ObservableCollection<int> { 0 };
 
         private HashSet<string> _categoryNames = new HashSet<string>
         {
@@ -31,6 +32,7 @@ namespace FlowLedger
 
         private Balance _currentBalance;
         private Month _selectedMonth = Month.NotSelected;
+        private int _selectedYear = 0;
 
         private bool _isOverviewVisible = false;
 
@@ -40,7 +42,7 @@ namespace FlowLedger
         private bool _isDeficit;
 
         private ObservableCollection<TransactionDetail> _transactions;
-        private Dictionary<string, MonthTransactions> _monthlyTransactions;
+        private Dictionary<YearMonth, MonthTransactions> _monthlyTransactions;
 
         public ObservableCollection<string> CategoryNamesView { get; } = new();
 
@@ -61,7 +63,7 @@ namespace FlowLedger
             _transactionVM = new TransactionViewModel();
             _currentBalance = new Balance(0, "SEK");
             _transactions = new ObservableCollection<TransactionDetail>();
-            _monthlyTransactions = new Dictionary<string, MonthTransactions>();
+            _monthlyTransactions = new Dictionary<YearMonth, MonthTransactions>();
         }
 
         public string FilePath
@@ -141,6 +143,16 @@ namespace FlowLedger
             }
         }
 
+        public int SelectedYear
+        {
+            get => _selectedYear;
+            set 
+            {
+                _selectedYear = value;
+                OnPropertyChanged(nameof(SelectedYear));
+            }
+        }
+
         public bool IsOverviewVisible
         {
             get => _isOverviewVisible;
@@ -191,17 +203,22 @@ namespace FlowLedger
             }
         }
 
-        public KeyValuePair<string, MonthTransactions> MonthTransactions
+        public List<KeyValuePair<YearMonth, MonthTransactions>> MonthTransactions
         {
             get
             {
-                var selectedMonth = SelectedMonth.ToString();
-                if (_monthlyTransactions.ContainsKey(selectedMonth))
-                {
-                    return _monthlyTransactions.Where(kv => kv.Key == SelectedMonth.ToString()).First();
-                }
-                return default;
+                // include monthtransactions from likely more than one year.
+                var selectedMonth = (int)SelectedMonth;
+                var transactions = _monthlyTransactions
+                    .Where(kvp => kvp.Key.Month == selectedMonth)
+                    .ToList();
+                return transactions;
             }
+        }
+
+        private void UpdateYearsWithTransactions()
+        {
+
         }
 
         public ObservableCollection<TransactionDetail> Transactions
@@ -216,16 +233,19 @@ namespace FlowLedger
 
         private void UpdateMonthlyOverview()
         {
-            if (SelectedMonth != Month.NotSelected)
+            // make this work only when Year is defined.
+            if (SelectedMonth != Month.NotSelected && SelectedYear != 0)
             {
                 IsOverviewVisible = true;
-                var month = SelectedMonth.ToString();
-                if (_monthlyTransactions.ContainsKey(month))
+                var month = (int)SelectedMonth;
+                var year = SelectedYear;
+                var yearmonth = new YearMonth(year, month);
+                if (_monthlyTransactions.ContainsKey(yearmonth))
                 {
-                    MonthlyRevenue = _monthlyTransactions[month].TotalRevenue;
-                    MonthlyExpense = _monthlyTransactions[month].TotalExpense;
-                    MonthlyTotalNet = _monthlyTransactions[month].MonthlyNet;
-                    IsDeficit = _monthlyTransactions[month].IsDeficit;
+                    MonthlyRevenue = _monthlyTransactions[yearmonth].TotalRevenue;
+                    MonthlyExpense = _monthlyTransactions[yearmonth].TotalExpense;
+                    MonthlyTotalNet = _monthlyTransactions[yearmonth].MonthlyNet;
+                    IsDeficit = _monthlyTransactions[yearmonth].IsDeficit;
                 } else
                 {
                     MonthlyRevenue = decimal.Zero;
@@ -242,10 +262,12 @@ namespace FlowLedger
 
         private void PopulateMonthlyTransactions()
         {
-            if (SelectedMonth != Month.NotSelected)
+            var month = (int)SelectedMonth;
+            var year = SelectedYear;
+            var yearmonth = new YearMonth(year, month);
+            if (SelectedMonth != Month.NotSelected && SelectedYear != 0)
             {
-                var month = SelectedMonth.ToString();
-                if (_monthlyTransactions.TryGetValue(month, out var monthTransactions))
+                if (_monthlyTransactions.TryGetValue(yearmonth, out var monthTransactions))
                 {
                     Transactions = new ObservableCollection<TransactionDetail>(monthTransactions.Transactions);
                 }
@@ -254,9 +276,17 @@ namespace FlowLedger
                     Transactions = new ObservableCollection<TransactionDetail>();
                 }
             }
+            else if (SelectedMonth != Month.NotSelected && SelectedYear == 0) // a specific month from all years with transactions
+            {
+                var monthlyTransactionsNoYearFilter = _monthlyTransactions
+                    .Where(kvp => kvp.Key.Month == month)
+                    .Select(p => p.Value)
+                    .SelectMany(t => t.Transactions);
+                Transactions = new ObservableCollection<TransactionDetail>(monthlyTransactionsNoYearFilter);
+            }
             else
             {
-                Transactions = 
+                Transactions =
                     new ObservableCollection<TransactionDetail>(_monthlyTransactions.Values.SelectMany(t => t.Transactions));
             }
         }
@@ -373,15 +403,18 @@ namespace FlowLedger
         {
             if (transaction.CreationDate != null)
             {
-                string month = transaction.CreationDate.Value.ToString("MMMM");
-                if (!_monthlyTransactions.ContainsKey(month))
+                int year = transaction.CreationDate.Value.Year;
+                int month = transaction.CreationDate.Value.Month;
+                var yearmonth = new YearMonth(year, month);
+                if (!_monthlyTransactions.ContainsKey(yearmonth))
                 {
                     var monthTransactions = new MonthTransactions();
                     monthTransactions.Add(transaction);
-                    _monthlyTransactions.Add(month, monthTransactions);
-                } else if (_monthlyTransactions[month] != null)
+                    _monthlyTransactions.Add(yearmonth, monthTransactions);
+                }
+                else if (_monthlyTransactions[yearmonth] != null)
                 {
-                    _monthlyTransactions[month].Add(transaction);
+                    _monthlyTransactions[yearmonth].Add(transaction);
                 }
             }
             else

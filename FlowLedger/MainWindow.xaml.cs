@@ -1,4 +1,5 @@
 ﻿using FlowLedger.Enums;
+using FlowLedger.Models;
 using FlowLedger.Utils;
 using System.ComponentModel;
 using System.Globalization;
@@ -156,10 +157,15 @@ namespace FlowLedger
         {
             if ((DataContext is MainViewModel mv) && (sender is Button))
             {
-                if (mv.SelectedMonth != Month.NotSelected)
+                int year = mv.SelectedYear;
+                int month = (int)mv.SelectedMonth;
+                if (year != 0 && month != 0) // PDF report only works for a specific month in a specific year.
                 {
-                    var monthReport = mv.MonthTransactions;
-                    if (monthReport.Key != default)
+                    var yearmonth = new YearMonth(year, month);
+                    var monthReport = mv.MonthTransactions
+                        .Where(x => x.Key.Equals(yearmonth))
+                        .FirstOrDefault();
+                    if (!monthReport.Equals(default(KeyValuePair<YearMonth, MonthTransactions>)))
                     {
                         var monthReportWindow = new MonthReportWindow(monthReport);
                         monthReportWindow.ShowDialog();
@@ -291,6 +297,26 @@ namespace FlowLedger
                 }
             }
             return null;
+        }
+    }
+
+    public class YearDescriptionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int year)
+            {
+                if (year == 0)
+                {
+                    return "<- No Filter by Year ->";
+                }
+            }
+            return Binding.DoNothing;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
         }
     }
 }

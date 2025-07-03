@@ -17,11 +17,11 @@ namespace FlowLedger
     {
         private bool _canExportPDF;
 
-        private readonly KeyValuePair<string, MonthTransactions> _monthSummary;
+        private readonly KeyValuePair<YearMonth, MonthTransactions> _monthSummary;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        internal MonthReportWindow(KeyValuePair<string, MonthTransactions> monthSummary)
+        internal MonthReportWindow(KeyValuePair<YearMonth, MonthTransactions> monthSummary)
         {
             DataContext = this;
             InitializeComponent();
