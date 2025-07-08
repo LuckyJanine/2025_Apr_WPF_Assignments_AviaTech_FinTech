@@ -217,6 +217,18 @@ namespace FlowLedger
             }
         }
 
+        private void InitializeAvailableYearsWithTransactions()
+        {
+            var availableYears = _monthlyTransactions.Keys
+                .Select(ym => ym.Year)
+                .Distinct()
+                .ToList();
+            foreach (var year in availableYears) 
+            {
+                Years.Add(year);
+            }
+        }
+
         private void UpdateYearsWithTransactions(int year)
         {
             if (!Years.Contains(year))
@@ -348,6 +360,7 @@ namespace FlowLedger
                     _monthlyTransactions = deserialized.MonthlyTransactions;
                     _currentBalance = new Balance(deserialized.CurrentBalance, "SEK");
                     OnPropertyChanged(nameof(CurrentBalance));
+                    InitializeAvailableYearsWithTransactions();
                     PopulateMonthlyTransactions();
                     return (true, string.Empty);
                 } else
