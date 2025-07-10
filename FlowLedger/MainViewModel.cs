@@ -47,8 +47,9 @@ namespace FlowLedger
         public ObservableCollection<string> CategoryNamesView { get; } = new();
 
         private TransactionType _selectedTransactionType = TransactionType.Spend;
-        private string _newCategoryToAdd;
 
+        private string _newCategoryToAdd;
+        private string _searchQuery;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -83,6 +84,16 @@ namespace FlowLedger
             {
                 _newCategoryToAdd = value;
                 OnPropertyChanged(nameof(NewCategoryToAdd));
+            }
+        }
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged(nameof(SearchQuery));
             }
         }
 
