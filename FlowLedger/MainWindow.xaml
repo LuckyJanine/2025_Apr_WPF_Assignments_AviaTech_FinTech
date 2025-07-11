@@ -207,9 +207,9 @@
                                         </TextBox.Text>
                                     </TextBox>
                                     <Button Grid.Row="4" Grid.ColumnSpan="3" Margin="20, 2"
-                                Content="Confirm Transaction - Income"
-                                FontSize="16"
-                                Click="btnConfirmTransaction_Click">
+                                            Content="Confirm Transaction - Income"
+                                            FontSize="16"
+                                            Click="btnConfirmTransaction_Click">
                                         <Button.Style>
                                             <Style TargetType="Button">
                                                 <Setter Property="IsEnabled" Value="False" />
@@ -404,8 +404,21 @@
                             >
                             </TextBlock>
                             <Button Grid.Column="1" Margin="10, 2, 10, 2"
-                                    Background="#3c4c85" Foreground="White"
-                                    Content="Search">
+                                    Content="Search"
+                                    Click="btnSearch_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=txtSearchQuery}"
+                                                         Value="False">
+                                                <Setter Property="IsEnabled" Value="True"/>
+                                                <!--<Setter Property="Background" Value="#3c4c85"/>
+                                                <Setter Property="Foreground" Value="White"/>-->
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
                             </Button>
                         </Grid>
                         <Grid x:Name="btnMonthReport"
