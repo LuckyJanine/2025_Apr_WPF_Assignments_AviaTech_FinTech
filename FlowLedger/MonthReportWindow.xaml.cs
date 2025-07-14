@@ -3,6 +3,7 @@ using FlowLedger.Models;
 using FlowLedger.Utils;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using PdfSharp.UniversalAccessibility.Drawing;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Documents;
@@ -59,16 +60,52 @@ namespace FlowLedger
                 XPen mainDividerPen = new XPen(XColors.Black, 2);
                 mainDividerPen.DashStyle = XDashStyle.Solid;
 
+                double marginLeftRight = 40;
+                double marginStackYToTop = 25;
+                double contentWidth = page.Width - 2 * marginLeftRight;
+
+                // topleft - Y: 25 
+                var titleRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 40);
                 xgf.DrawString(
-                    $"Month Summary Report - {_monthSummary.Key}", 
+                    $"Month Summary Report - {_monthSummary.Key.ToString()}", 
                     titleFont, 
-                    XBrushes.Black, 
-                    new XRect(40, 40, page.Width, 40), 
+                    XBrushes.Black,
+                    titleRect, 
+                    XStringFormats.Center
+                    );
+                xgf.DrawRectangle(XPens.Red, titleRect); // *** only for debugging purpose with visualization of the layout
+
+                // topleft - Y: (25 + 40) + 10
+                marginStackYToTop = marginStackYToTop + 50;
+                var lineRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 20);
+                xgf.DrawLine(
+                    mainDividerPen, 40, 85, contentWidth + marginLeftRight, 85
+                    );
+                xgf.DrawRectangle(XPens.Red, lineRect); // *** only for debugging purpose with visualization of the layout
+
+                // topleft - Y: ((25 + 40) + 10) + 20 + 10 = 105
+                marginStackYToTop += 30;
+                var paraRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 40);
+                xgf.DrawString(
+                    $"Net cash-flow: {_monthSummary.Value.MonthlyNet}",
+                    paragraphFont,
+                    XBrushes.Black,
+                    paraRect,
                     XStringFormats.TopLeft
                     );
-                xgf.DrawLine(
-                    mainDividerPen, 40, 80, (page.Width - 40), 80
-                    );
+                xgf.DrawRectangle(XPens.Red, paraRect); // *** only for debugging purpose with visualization of the layout
+
+                // topleft - Y: 105 + 40 + 10
+                marginStackYToTop += 50;
+                var categoryListParaRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 100);
+
+                xgf.DrawRectangle(XPens.Red, categoryListParaRect); // *** only for debugging purpose with visualization of the layout
+
+                marginStackYToTop += 110;
+                categoryListParaRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 100);
+
+                xgf.DrawRectangle(XPens.Red, categoryListParaRect); // *** only for debugging purpose with visualization of the layout
+
                 doc.Save(file);
             }
         }
