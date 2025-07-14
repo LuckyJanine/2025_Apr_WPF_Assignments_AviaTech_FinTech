@@ -184,7 +184,10 @@ namespace FlowLedger
         {
             if ((DataContext is MainViewModel mv) && (sender is Button))
             {
-
+                if (!string.IsNullOrWhiteSpace(mv.SearchQuery))
+                {
+                    mv.SearchTransactions();
+                }
             }
         }
 
