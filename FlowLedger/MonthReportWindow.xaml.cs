@@ -81,7 +81,7 @@ namespace FlowLedger
                 PagePadding = new Thickness(20)
             };
 
-            doc.Blocks.Add(new Paragraph(new Bold(new Run($"Month Summary Report - {_monthSummary.Key}"))) { FontSize = 16 });
+            doc.Blocks.Add(new Paragraph(new Bold(new Run($"Month Summary Report - {_monthSummary.Key.ToString()}"))) { FontSize = 16 });
 
             if (_monthSummary.Value == null || !_monthSummary.Value.Transactions.Any())
             {

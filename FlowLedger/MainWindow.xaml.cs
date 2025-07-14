@@ -175,7 +175,7 @@ namespace FlowLedger
                     }
                 } else
                 {
-                    MessageBox.Show("Select a month to generate the report.");
+                    MessageBox.Show("Select a month in a year of interest to generate the report.");
                 }
             }
         }
