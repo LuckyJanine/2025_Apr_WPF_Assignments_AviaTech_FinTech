@@ -56,6 +56,7 @@ namespace FlowLedger
                 // canvas
                 XGraphics xgf = XGraphics.FromPdfPage(page);
                 XFont titleFont = new XFont("Arial", 14, XFontStyleEx.Bold);
+                XFont subtitleFont = new XFont("Arial", 12, XFontStyleEx.Bold);
                 XFont paragraphFont = new XFont("Arial", 12, XFontStyleEx.Regular);
                 XPen mainDividerPen = new XPen(XColors.Black, 2);
                 mainDividerPen.DashStyle = XDashStyle.Solid;
@@ -73,38 +74,92 @@ namespace FlowLedger
                     titleRect, 
                     XStringFormats.Center
                     );
-                xgf.DrawRectangle(XPens.Red, titleRect); // *** only for debugging purpose with visualization of the layout
+                // xgf.DrawRectangle(XPens.Red, titleRect); 
+                // *** only for debugging purpose with visualization of the layout
 
-                // topleft - Y: (25 + 40) + 10
                 marginStackYToTop = marginStackYToTop + 50;
                 var lineRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 20);
                 xgf.DrawLine(
                     mainDividerPen, 40, 85, contentWidth + marginLeftRight, 85
                     );
-                xgf.DrawRectangle(XPens.Red, lineRect); // *** only for debugging purpose with visualization of the layout
+                // xgf.DrawRectangle(XPens.Red, lineRect); 
+                // *** only for debugging purpose with visualization of the layout
 
-                // topleft - Y: ((25 + 40) + 10) + 20 + 10 = 105
                 marginStackYToTop += 30;
+                double bulletIndent = 20;
                 var paraRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 40);
                 xgf.DrawString(
-                    $"Net cash-flow: {_monthSummary.Value.MonthlyNet}",
-                    paragraphFont,
+                    "Net cash-flow: ",
+                    subtitleFont,
                     XBrushes.Black,
                     paraRect,
                     XStringFormats.TopLeft
                     );
-                xgf.DrawRectangle(XPens.Red, paraRect); // *** only for debugging purpose with visualization of the layout
+                marginStackYToTop += 20;
+                xgf.DrawString(
+                    $"{_monthSummary.Value.MonthlyNet}",
+                    paragraphFont,
+                    XBrushes.Black,
+                    marginLeftRight + bulletIndent,
+                    marginStackYToTop,
+                    XStringFormats.TopLeft
+                    );
+                // xgf.DrawRectangle(XPens.Red, paraRect); 
+                // *** only for debugging purpose with visualization of the layout
 
-                // topleft - Y: 105 + 40 + 10
                 marginStackYToTop += 50;
                 var categoryListParaRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 100);
-
-                xgf.DrawRectangle(XPens.Red, categoryListParaRect); // *** only for debugging purpose with visualization of the layout
+                xgf.DrawString(
+                    "Top 3 expense categories: ",
+                    subtitleFont,
+                    XBrushes.Black,
+                    marginLeftRight,
+                    marginStackYToTop,
+                    XStringFormats.TopLeft
+                    );
+                marginStackYToTop += 20;
+                var expenseCategories = GetTopExpenseCategories();
+                foreach (var category in expenseCategories)
+                {
+                    xgf.DrawString(
+                        $"\u2022 {category}",
+                        paragraphFont,
+                        XBrushes.Black,
+                        marginLeftRight + bulletIndent,
+                        marginStackYToTop,
+                        XStringFormats.TopLeft
+                        );
+                    marginStackYToTop += 20;
+                }
+                // xgf.DrawRectangle(XPens.Red, categoryListParaRect); 
+                // *** only for debugging purpose with visualization of the layout
 
                 marginStackYToTop += 110;
                 categoryListParaRect = new XRect(marginLeftRight, marginStackYToTop, contentWidth, 100);
-
-                xgf.DrawRectangle(XPens.Red, categoryListParaRect); // *** only for debugging purpose with visualization of the layout
+                xgf.DrawString(
+                    "Top 3 revenue categories: ",
+                    subtitleFont,
+                    XBrushes.DarkBlue,
+                    marginLeftRight,
+                    marginStackYToTop,
+                    XStringFormats.TopLeft
+                    );
+                marginStackYToTop += 20;
+                var revenueCategories = GetTopRevenueCategories();
+                foreach (var category in revenueCategories)
+                {
+                    xgf.DrawString(
+                        $"\u2022 {category}",
+                        paragraphFont,
+                        XBrushes.DarkBlue,
+                        marginLeftRight + bulletIndent,
+                        marginStackYToTop,
+                        XStringFormats.TopLeft
+                        );
+                    marginStackYToTop += 20;
+                }
+                // xgf.DrawRectangle(XPens.Red, categoryListParaRect); 
+                // *** only for debugging purpose with visualization of the layout
 
                 doc.Save(file);
             }
