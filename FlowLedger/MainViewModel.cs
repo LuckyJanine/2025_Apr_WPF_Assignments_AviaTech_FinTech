@@ -365,6 +365,9 @@ namespace FlowLedger
                 {
                     Transactions.Clear();
                     _transactionsByYearmonth.Clear();
+                    SelectedMonth = Month.NotSelected;
+                    SelectedYear = 0;
+                    SearchQuery = string.Empty;
                     var deserialized = JsonConvert.DeserializeObject<AccountStatus>(json, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.Auto,
@@ -374,8 +377,6 @@ namespace FlowLedger
                     OnPropertyChanged(nameof(CurrentBalance));
                     InitializeAvailableYearsWithTransactions();
                     PopulateMonthlyTransactions();
-                    // todo:
-                    // reset Filter and Search
                     return (true, string.Empty);
                 } else
                 {
