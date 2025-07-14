@@ -456,6 +456,12 @@ namespace FlowLedger
             Transactions = new ObservableCollection<TransactionDetail>(searchResult);
         }
 
+        public void ResetSearch()
+        {
+            SearchQuery = string.Empty;
+            PopulateMonthlyTransactions();
+        }
+
         // Don't feel comfortable with keeping two collections as requested 3.2 in assignment doc
         // use Dictionary as single point of truth.
         // omit List<Transaction> on purpose.
