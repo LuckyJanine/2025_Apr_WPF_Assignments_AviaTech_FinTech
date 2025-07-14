@@ -161,6 +161,7 @@ namespace FlowLedger
             {
                 _selectedYear = value;
                 OnPropertyChanged(nameof(SelectedYear));
+                UpdateMonthlyOverview();
                 PopulateMonthlyTransactions();
             }
         }

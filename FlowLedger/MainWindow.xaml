@@ -453,18 +453,18 @@
                                 <ColumnDefinition Width="1.5*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" VerticalAlignment="Center"
-                                       Text="Total Revenue:">
+                                       Text="Total Revenue:" FontSize="12">
                             </TextBlock>
-                            <TextBlock x:Name="txtTotalRevenue"
+                            <TextBlock x:Name="txtTotalRevenue" Margin="5"
                                        Grid.Column="1" VerticalAlignment="Center"
                                        FontWeight="SemiBold"
                                        Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}"
                                        Text="{Binding MonthlyRevenue}">
                             </TextBlock>
                             <TextBlock Grid.Column="2" VerticalAlignment="Center"
-                                       Text="Total Expense:">
+                                       Text="Total Expense:" FontSize="12">
                             </TextBlock>
-                            <TextBlock Grid.Column="3" VerticalAlignment="Center"
+                            <TextBlock Grid.Column="3" VerticalAlignment="Center" Margin="5"
                                        FontWeight="SemiBold"
                                        Visibility="{Binding IsOverviewVisible, Converter={StaticResource BoolToTextBlockVisibilityConverter}}"
                                        Text="{Binding MonthlyExpense}">
